@@ -35,3 +35,13 @@ Route::prefix('user_register')
     });
 
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
+
+Route::prefix('users')
+    ->controller(AuthController::class)
+    ->group(function () {
+        Route::get('/', 'index');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::post('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
+    });
