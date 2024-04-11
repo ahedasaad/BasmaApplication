@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,12 +48,21 @@ Route::prefix('users')
         Route::delete('/{id}', 'destroy');
     });
 
-Route::prefix('products')
-    ->controller(AuthController::class)
+/*
+|--------------------------------------------------------------------------
+| Posts Management
+|--------------------------------------------------------------------------
+*/
+Route::prefix('posts')
+    ->controller(PostController::class)
     ->group(function () {
         Route::get('/', 'index');
         Route::post('/', 'store');
         Route::get('/{id}', 'show');
         Route::post('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
+        Route::post('/post/filter', 'filter');
+        Route::post('/accept/{id}', 'acceptPost');
+        Route::post('/unaccept/{id}', 'unacceptPost');
+        Route::get('/user/get_user_posts', 'getUserPosts');
     });
