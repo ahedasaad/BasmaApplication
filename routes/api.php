@@ -34,6 +34,7 @@ Route::prefix('user_register')
         Route::post('/verify', 'verifyCode');
         Route::post('/resend', 'resendCode');
         Route::post('/login', 'login');
+        Route::post('/child/login', 'login');
     });
 
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);

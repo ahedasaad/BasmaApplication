@@ -19,9 +19,10 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->string('mobile_number');
+            $table->string('user_name')->unique()->nullable();
             $table->enum('account_type', ['donor','child','admin','employee','representative'])->default('donor');
-            $table->string('address');
-            $table->boolean('is_active');
+            $table->string('address')->nullable();
+            $table->boolean('is_active')->default(0);
             $table->timestamps();
         });
     }
