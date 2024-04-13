@@ -75,7 +75,7 @@ class PostController extends Controller
     public function show($id)
     {
         try {
-            $post = Post::findOrFail($id);
+            $post = Post::withCount('likes')->findOrFail($id);
             $postResource = new PostResource($post);
             return response()->json(['data ' => $postResource], 200);
         } catch (\Exception $e) {
