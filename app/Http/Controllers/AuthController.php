@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Registration;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use App\Mail\UserConfirmationMail;
 use Validator;
 
@@ -16,7 +16,7 @@ class AuthController extends Controller
     /*
     |--------------------------------------------------------------------------
     | This Controller Contains all the Auth Operation:
-    | Register- Verify Account- Log in- Log out
+    | Register- Verify Account- Login- Child Login- Log out- Change Password
     |--------------------------------------------------------------------------
     */
     public function register(Request $request)
@@ -85,7 +85,6 @@ class AuthController extends Controller
                 'email' => 'required|email',
             ]);
 
-            // Find the job seeker by email
             $user = User::where('email', $request->email)->first();
 
             // Check if the user has exceeded the allowed number of resend attempts
@@ -172,7 +171,7 @@ class AuthController extends Controller
 
     public function loginChild(Request $request)
     {
-        try{
+        try {
             $validate = Validator::make($request->all(), [
                 'user_name' => 'required',
                 'password' => 'required|string'
@@ -221,6 +220,32 @@ class AuthController extends Controller
                 'status' => 'success',
                 'message' => 'User is logged out successfully'
             ], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function changePassword(Request $request)
+    {
+        try {
+            $request->validate([
+                'current_password' => 'required',
+                'new_password' => 'required|string|min:8',
+            ]);
+
+            // Get the authenticated user
+            $user = Auth::user();
+
+            // Check if the current password matches
+            if (!Hash::check($request->current_password, $user->password)) {
+                return response()->json(['error' => 'Current password is incorrect'], 400);
+            }
+
+            // Update the password
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+
+            return response()->json(['message' => 'Password changed successfully'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

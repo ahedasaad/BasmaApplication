@@ -34,10 +34,11 @@ Route::prefix('user_register')
         Route::post('/verify', 'verifyCode');
         Route::post('/resend', 'resendCode');
         Route::post('/login', 'login');
-        Route::post('/child/login', 'login');
+        Route::post('/child/login', 'loginChild');
     });
 
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:api')->post('/change/change_password', [AuthController::class, 'changePassword']);
 
 Route::prefix('users')
     ->controller(UserController::class)
