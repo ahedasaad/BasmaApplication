@@ -18,10 +18,12 @@ class PostResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'name' => $this->user->name,
+            'image_profile' => $this->user->child_profile?->image,
             'post_category_id' => $this->post_category_id,
             'state' => $this->state,
             'image' => $this->image,
             'text' => $this->text,
+            'like_count' => $this->likes_count,
             'created_at' => $this->created_at->format('Y-m-d'),
             'updated_at' => $this->updated_at->format('Y-m-d'),
         ];

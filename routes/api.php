@@ -54,7 +54,7 @@ Route::prefix('users')
 | Posts Management
 |--------------------------------------------------------------------------
 */
-Route::prefix('posts')
+Route::middleware('auth:api')->prefix('posts')
     ->controller(PostController::class)
     ->group(function () {
         Route::get('/', 'index');
@@ -66,4 +66,6 @@ Route::prefix('posts')
         Route::post('/accept/{id}', 'acceptPost');
         Route::post('/unaccept/{id}', 'unacceptPost');
         Route::get('/user/get_user_posts', 'getUserPosts');
+        Route::post('/like/{postId}', 'addLike');
+        Route::post('/remove/like/{postId}', 'removeLike');
     });

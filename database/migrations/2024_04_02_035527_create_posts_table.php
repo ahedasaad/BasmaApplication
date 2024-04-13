@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('post_category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('post_category_id')->constrained()->onDelete('cascade')->nullable();
             $table->enum('state', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->string('image');
-            $table->text('text');
+            $table->string('image')->nullable();
+            $table->text('text')->nullable();
             $table->timestamps();
         });
     }
