@@ -50,10 +50,7 @@ Route::prefix('users')
         Route::post('/addChild', 'addChild');
         Route::get('/getAllChildren', 'getAllChildren');
         Route::post('/filterChildren', 'filterChildren');
-        Route::get('/calculateChildAge/{id}', 'calculateChildAge');
-
-
-
+        
     });
 /*
 |--------------------------------------------------------------------------
