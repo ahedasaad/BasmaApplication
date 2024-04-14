@@ -1,0 +1,165 @@
+<?php
+
+namespace App\Services;
+
+use App\Repositories\ChildRepository;
+use App\Repositories\UserRepository;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Support\Facades\Hash;
+
+class UserService
+{
+    private $userRepository;
+    private $childRepository;
+    private $validationService;
+
+    /**
+     * Create a new instance of the service.
+     *
+     * @param UserRepository  $userRepository
+     * @param ChildRepository $childRepository
+     * @param ValidationService $validationService
+     */
+
+    public function __construct(UserRepository $userRepository, ChildRepository $childRepository , ValidationService $validationService)
+    {
+        $this->userRepository = $userRepository;
+        $this->childRepository = $childRepository;
+        $this->validationService = $validationService;
+    }
+
+    /**
+     * Add a new employee.
+     */
+    public function addEmployee(array $data)
+    {
+        $this->validationService->validateAddUser($data);
+
+        $data['account_type'] = isset($data['account_type']) ? $data['account_type'] : 'employee';
+        $data['password'] = Hash::make($data['password']);
+        return $this->userRepository->create($data);
+    }
+
+    /**
+     * Create a new child user.
+     */
+    public function createChild(array $data)
+    {
+        $this->validationService->validateAddChild($data);
+
+        $data['account_type'] = isset($data['account_type']) ? $data['account_type'] : 'child';
+        $data['password'] = Hash::make($data['password']);
+
+        $user = $this->userRepository->create($data);
+        $childData = array_merge($data, ['user_id' => $user->id]);
+        $child = $this->childRepository->create($childData);
+        $user->child = $child;
+        return $user;
+    }
+
+    /**
+     * Update user information.
+     */
+    public function updateUser($userId, array $data)
+    {
+        $this->validationService->validateUpdateUser($data, $userId);
+
+        $user = $this->userRepository->findUserById($userId);
+
+        if (!$user) {
+            throw new \Exception('المستخدم غير موجود');
+        }
+
+        $this->userRepository->update($user, $data);
+
+        if ($user->account_type == 'child') {
+            $child = $this->childRepository->findChildByUserId($userId);
+
+            if (!$child) {
+                throw new \Exception('الطفل غير موجود');
+            }
+
+            $this->childRepository->update($child, $data);
+        }
+
+        return $user;
+    }
+
+    /**
+     * Delete a user and associated child if exists.
+     */
+    public function deleteUser($id)
+    {
+        $user = $this->userRepository->findUserById($id);
+
+        if (!$user) {
+            throw new \Exception('المستخدم غير موجود');
+        }
+
+        if ($user->account_type === 'child') {
+            $child = $this->childRepository->findChildByUserId($id);
+
+            if ($child) {
+                $this->childRepository->delete($child->id);
+            }
+        }
+
+        return $this->userRepository->delete($id);
+    }
+
+    /**
+     * Retrieve user information with child details if available.
+     */
+    public function showUserInfo($id)
+    {
+        $user = $this->userRepository->findUserById($id);
+
+        if (!$user) {
+            throw new \Exception('المستخدم غير موجود');
+        }
+
+        $userInfo = $this->userRepository->getUserInfo($user);
+
+        if ($user->account_type == 'child') {
+            $childInfo = $this->childRepository->findChildByUserId($user->id);
+            $userInfo['child_info'] = $childInfo;
+        }
+
+        return $userInfo;
+    }
+
+    /**
+     * Retrieve all children information.
+     */
+    public function getAllChildren()
+    {
+        try {
+            return $this->childRepository->getAllChildren();
+        } catch (\Exception $e) {
+            throw new \Exception('خطأ في جلب جميع الأطفال: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Filter children based on the request parameters(filter_type).
+     */
+
+    public function filterChildren(array $data)
+    {
+        $filterType = $data['filter_type'];
+        $value = $data['value'];
+        switch ($filterType) {
+            case 'age':
+                return $this->childRepository->filterChildrenByAge($value);
+            case 'disease':
+                return $this->childRepository->filterChildrenByDisease($value);
+            default:
+                throw new \InvalidArgumentException('Invalid filter type.');
+        }
+    }
+
+
+
+
+
+}
