@@ -40,15 +40,15 @@ Route::prefix('user_register')
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
 Route::middleware('auth:api')->post('/change/change_password', [AuthController::class, 'changePassword']);
 
-Route::prefix('users')
-    ->controller(UserController::class)
-    ->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::get('/{id}', 'show');
-        Route::post('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
-    });
+//Route::prefix('users')
+//    ->controller(UserController::class)
+//    ->group(function () {
+//        Route::get('/', 'index');
+//        Route::post('/', 'store');
+//        Route::get('/{id}', 'show');
+//        Route::post('/{id}', 'update');
+//        Route::delete('/{id}', 'destroy');
+//    });
 
 /*
 |--------------------------------------------------------------------------
@@ -69,4 +69,25 @@ Route::middleware('auth:api')->prefix('posts')
         Route::get('/user/get_user_posts', 'getUserPosts');
         Route::post('/like/{postId}', 'addLike');
         Route::post('/remove/like/{postId}', 'removeLike');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| user Management
+|--------------------------------------------------------------------------
+*/
+Route::prefix('users')
+    ->controller(UserController::class)
+    ->group(function () {
+        Route::post('/addEmployee', 'addEmployee');
+        Route::post('/updateUser/{id}', 'updateUser');
+        Route::delete('/deleteUser/{id}', 'deleteUser');
+        Route::get('/showUserInfo/{id}', 'showUserInfo');
+        Route::post('/addChild', 'addChild');
+        Route::get('/getAllChildren', 'getAllChildren');
+        Route::post('/filterChildren', 'filterChildren');
+        Route::get('/calculateChildAge/{id}', 'calculateChildAge');
+
+
+
     });

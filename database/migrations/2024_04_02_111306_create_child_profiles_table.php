@@ -16,12 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('birthdate');
             $table->date('date_of_join');
-            $table->date('date_of_exit');
+            $table->date('date_of_exit')->nullable();
             $table->date('starting_disease');
-            $table->date('healing_date');
+            $table->date('healing_date')->nullable();
             $table->string('disease_type');
-            $table->text('note');
-            $table->string('image');
+            $table->text('note')->nullable()->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }
