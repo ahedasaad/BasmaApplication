@@ -50,7 +50,7 @@ class PostController extends Controller
             $post = new Post();
             $post->fill([
                 'user_id' => $user->id,
-                'post_category_id' => 1,
+                'post_category' => 'other',
                 'state' => 'pending',
                 'text' => $request->input('text'),
             ]);
@@ -90,7 +90,7 @@ class PostController extends Controller
     {
         try {
             $request->validate([
-                'post_category_id' => 'nullable|exists:post_categories,id',
+                'post_category' => 'in:story,activity,other',
                 'state' => 'in:pending,approved,rejected',
                 'text' => 'nullable|string|max:5000',
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -104,7 +104,7 @@ class PostController extends Controller
             }
 
             $post->update([
-                'post_category_id' => $request->input('post_category_id'),
+                'post_category' => $request->input('post_category'),
                 'state' => $request->input('state'),
                 'text' => $request->input('text'),
             ]);

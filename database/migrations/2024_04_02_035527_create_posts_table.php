@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('post_category_id')->constrained()->onDelete('cascade')->nullable();
+            $table->enum('post_category', ['story', 'activity', 'other'])->default('other');
             $table->enum('state', ['pending', 'approved', 'rejected'])->default('pending');
             $table->string('image')->nullable();
             $table->text('text')->nullable();

@@ -19,7 +19,7 @@ class PostResource extends JsonResource
             'user_id' => $this->user_id,
             'name' => $this->user->name,
             'image_profile' => $this->user->child_profile?->image,
-            'post_category_id' => $this->post_category_id,
+            'post_category' => $this->post_category,
             'state' => $this->state,
             'image' => $this->image,
             'text' => $this->text,
