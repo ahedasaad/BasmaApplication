@@ -7,9 +7,20 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Like;
 use App\Http\Resources\PostResource;
+use App\Services\PostService;
+use App\Services\LikeService;
 
 class PostController extends Controller
 {
+    protected $postService;
+    protected $likeService;
+
+    public function __construct(PostService $postService, LikeService $likeService)
+    {
+        $this->postService = $postService;
+        $this->likeService = $likeService;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | This Controller Contains all the Posts Management:
@@ -24,7 +35,7 @@ class PostController extends Controller
     public function index()
     {
         try {
-            $posts = Post::withCount('likes')->paginate(10);
+            $posts = $this->postService->getAllPaginated();
             return PostResource::collection($posts);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -42,25 +53,26 @@ class PostController extends Controller
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $user = User::find(auth()->user()->id);
+            $user = User::find(auth()->id());
             if (!$user) {
                 return response()->json(['message' => 'User not found'], 404);
             }
 
-            $post = new Post();
-            $post->fill([
+            $postData = [
                 'user_id' => $user->id,
                 'post_category' => 'other',
                 'state' => 'pending',
                 'text' => $request->input('text'),
-            ]);
+            ];
 
             if ($request->hasFile('image')) {
-                $photoPath = $request->file('image')->store('photos', 'public');
-                $post->image = $photoPath;
+
+                $imagePath = $request->file('image')->store('photos', 'public');
+
+                $postData['image'] = $imagePath;
             }
 
-            $post->save();
+            $post = $this->postService->createPost($postData);
 
             $postResource = new PostResource($post);
             return response()->json(['data ' => $postResource], 201);
@@ -75,7 +87,7 @@ class PostController extends Controller
     public function show($id)
     {
         try {
-            $post = Post::withCount('likes')->findOrFail($id);
+            $post = $this->postService->findPostById($id);
             $postResource = new PostResource($post);
             return response()->json(['data ' => $postResource], 200);
         } catch (\Exception $e) {
@@ -96,19 +108,23 @@ class PostController extends Controller
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $post = Post::findOrFail($id);
+            $post = $this->postService->findPostById($id);
 
-            if ($request->hasFile('image')) {
-                $photoPath = $request->file('image')->store('photos', 'public');
-                $post->image = $photoPath;
-            }
-
-            $post->update([
+            $postData = [
                 'post_category' => $request->input('post_category'),
                 'state' => $request->input('state'),
                 'text' => $request->input('text'),
-            ]);
-            $postResource = new PostResource($post);
+            ];
+
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('photos', 'public');
+                $postData['image'] = $imagePath;
+            }
+
+            $updatedPost = $this->postService->updatePost($post, $postData);
+
+            $postResource = new PostResource($updatedPost);
+
             return response()->json(['data ' => $postResource], 200);
 
         } catch (\Exception $e) {
@@ -122,8 +138,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         try {
-            $post = Post::findOrFail($id);
-            $post->delete();
+            $this->postService->deletePost($id);
             return response()->json(['message' => 'Post deleted successfully'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -133,15 +148,10 @@ class PostController extends Controller
     public function filter(Request $request)
     {
         try {
-            $post_category_id = $request->input('post_category_id');
+            $postCategory = $request->input('post_category');
 
-            $query = Post::query();
+            $posts = $this->postService->filterPosts($postCategory);
 
-            if ($post_category_id) {
-                $query->where('post_category_id', '=', $post_category_id);
-            }
-
-            $posts = $query->paginate(10);
             return PostResource::collection($posts);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -151,10 +161,8 @@ class PostController extends Controller
     public function acceptPost($id)
     {
         try {
-            $post = Post::findOrFail($id);
-            $post->state = 'approved';
-            $post->save();
-            return response()->json(['message' => 'Done'], 200);
+            $post = $this->postService->acceptPost($id);
+            return response()->json(['message' => 'Post accepted successfully'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -163,10 +171,9 @@ class PostController extends Controller
     public function unacceptPost($id)
     {
         try {
-            $post = Post::findOrFail($id);
-            $post->state = 'rejected';
-            $post->save();
-            return response()->json(['message' => 'Done'], 200);
+            $post = $this->postService->unacceptPost($id);
+
+            return response()->json(['message' => 'Post unaccepted successfully'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -181,7 +188,7 @@ class PostController extends Controller
                 return response()->json(['message' => 'User not found'], 404);
             }
 
-            $posts = $user->posts()->paginate(10);
+            $posts = $this->postService->getUserPosts($user);
 
             return PostResource::collection($posts);
         } catch (\Exception $e) {
@@ -192,19 +199,15 @@ class PostController extends Controller
     public function addLike(Request $request, $postId)
     {
         try {
-            // Check if the user has already liked the post
-            $existingLike = Like::where('user_id', auth()->id())->where('post_id', $postId)->first();
+            $userId = auth()->id();
 
-            // If the user has already liked the post, return a response indicating that
-            if ($existingLike) {
+            // Check if the user has already liked the post
+            if ($this->likeService->checkIfUserLikedPost($userId, $postId)) {
                 return response()->json(['message' => 'You have already liked this post'], 400);
             }
 
-            // Create a new like record
-            $like = new Like();
-            $like->user_id = auth()->id();
-            $like->post_id = $postId;
-            $like->save();
+            // Add like for the post
+            $this->likeService->addLike($userId, $postId);
 
             return response()->json(['message' => 'Like added successfully'], 200);
         } catch (\Exception $e) {
@@ -215,12 +218,14 @@ class PostController extends Controller
     public function removeLike($postId)
     {
         try {
-            // Find the like record for the authenticated user and the specified post
-            $like = Like::where('user_id', auth()->id())->where('post_id', $postId)->first();
+            $userId = auth()->id();
+
+            // Find the like record for the user and post
+            $like = $this->likeService->findUserLike($userId, $postId);
 
             // If the like record exists, delete it
             if ($like) {
-                $like->delete();
+                $this->likeService->deleteLike($like);
                 return response()->json(['message' => 'Like removed successfully'], 200);
             } else {
                 return response()->json(['message' => 'You have not liked this post'], 400);
