@@ -27,6 +27,6 @@ class SubjectClass extends Pivot
 
     public function titles()
     {
-        return $this->hasMany(Title::class);
+        return $this->hasMany(Title::class,'subject_class_id');
     }
 }

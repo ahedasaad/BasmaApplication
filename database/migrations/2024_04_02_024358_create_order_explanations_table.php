@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('title_id')->constrained()->onDelete('cascade');
             $table->string('note');
             $table->enum('state', ['pending', 'approved'])->default('pending');
+            $table->integer('approvals')->default(0);
             $table->timestamps();
         });
     }
