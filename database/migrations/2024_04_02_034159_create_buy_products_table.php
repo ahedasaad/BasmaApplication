@@ -18,6 +18,7 @@ return new class extends Migration
             $table->enum('state', ['pending', 'received', 'unreceived', 'done'])->default('pending');
             $table->string('mobile_number');
             $table->string('address');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

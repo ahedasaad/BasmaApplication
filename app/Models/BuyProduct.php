@@ -15,6 +15,7 @@ class BuyProduct extends Model
         'state',
         'mobile_number',
         'address',
+        'note',
     ];
 
     public function user()
