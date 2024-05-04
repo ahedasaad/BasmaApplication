@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,4 +115,24 @@ Route::prefix('education')
 
 
 
-   });
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Products Management
+|--------------------------------------------------------------------------
+*/
+Route::middleware('auth:api')->prefix('products')
+    ->controller(ProductController::class)
+    ->group(function () {
+        Route::get('/', 'index');
+        Route::get('/category/all', 'getAllCategories');
+        Route::get('/category/{categoryId}', 'getProductsByCategory');
+        Route::post('/', 'store');
+        Route::get('/{id}', 'show');
+        Route::post('/{id}', 'update');
+        Route::delete('/{id}', 'destroy');
+        Route::post('/product/filter', 'filter');
+        Route::post('/accept/{id}', 'acceptProduct');
+        Route::post('/unaccept/{id}', 'unacceptProduct');
+    });

@@ -3,13 +3,25 @@
 namespace App\Repositories;
 
 use App\Models\Product;
+use App\Models\Category;
 
 class ProductRepository
 {
-    
+    public function getAllCategory()
+    {
+        return Category::get();
+    }
+
     public function getAllPaginated()
     {
         return Product::paginate(10);
+    }
+
+    public function getByCategory($categoryId)
+    {
+        return Product::where('category_id', $categoryId)
+            ->where('demand_state', 'approved')
+            ->paginate(10);
     }
 
     public function create(array $attributes)
@@ -22,25 +34,49 @@ class ProductRepository
         return Product::findOrFail($id);
     }
 
-    public function update(Product $product,  array $attributes)
+    public function update(Product $product, array $attributes)
     {
         $product->update($attributes);
         return $product;
     }
 
-    public function delete(Product $product)
+    public function delete($id)
     {
+        $product = Product::findOrFail($id);
         return $product->delete();
     }
 
-    public function filterPosts($postCategory)
+    public function filterProducts(array $attributes)
     {
+        $categoryId = $attributes['category_id'] ?? null;
+        $state = $attributes['state'] ?? null;
+
         $query = Product::query();
 
-        if ($postCategory) {
-            $query->where('post_category', '=', $postCategory);
+        if ($categoryId != null) {
+            $query->where('category_id', '=', $categoryId);
+        }
+
+        if ($state != null) {
+            $query->where('state', '=', $state);
         }
 
         return $query->get();
+    }
+
+    public function acceptProduct($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->demand_state = 'approved';
+        $product->save();
+        return $product;
+    }
+
+    public function unacceptProduct($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->demand_state = 'rejected';
+        $product->save();
+        return $product;
     }
 }
