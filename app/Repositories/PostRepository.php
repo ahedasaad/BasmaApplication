@@ -9,6 +9,13 @@ class PostRepository
 
     public function getAllPaginated()
     {
+        return Post::where('state', 'approved')
+            ->withCount('likes')
+            ->paginate(10);
+    }
+
+    public function getAll()
+    {
         return Post::withCount('likes')->paginate(10);
     }
 

@@ -42,6 +42,16 @@ class PostController extends Controller
         }
     }
 
+    public function getAll()
+    {
+        try {
+            $posts = $this->postService->getAll();
+            return PostResource::collection($posts);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -66,8 +76,9 @@ class PostController extends Controller
             ];
 
             if ($request->hasFile('image')) {
-
-                $imagePath = $request->file('image')->store('photos', 'public');
+                $image = $request->file('image');
+                $imageName = $image->getClientOriginalName();
+                $imagePath = $image->storeAs('posts', $imageName, 'public');
 
                 $postData['image'] = $imagePath;
             }

@@ -19,6 +19,11 @@ class PostService
         return $this->postRepository->getAllPaginated();
     }
 
+    public function getAll()
+    {
+        return $this->postRepository->getAll();
+    }
+
     public function createPost(array $attributes)
     {
         return $this->postRepository->create($attributes);
