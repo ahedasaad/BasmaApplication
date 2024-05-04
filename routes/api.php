@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EducationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -43,6 +44,7 @@ Route::middleware('auth:api')->post('/change/change_password', [AuthController::
 Route::prefix('users')
     ->controller(UserController::class)
     ->group(function () {
+        //Admin
         Route::post('/addEmployee', 'addEmployee');
         Route::post('/updateUser/{id}', 'updateUser');
         Route::delete('/deleteUser/{id}', 'deleteUser');
@@ -74,3 +76,42 @@ Route::middleware('auth:api')->prefix('posts')
     });
 
 
+/*
+|--------------------------------------------------------------------------
+| Education Management
+|--------------------------------------------------------------------------
+*/
+
+//middleware('auth:api')->child/
+Route::prefix('education')
+    ->controller(EducationController::class)
+    ->group(function () {
+        Route::get('/getAllClassroom', 'getAllClassroom');
+        Route::get('/getSubjectsForClassroom/{id}', 'getSubjectsForClassroom');
+        Route::get('/getTitlesForSubjectClass/{id}', 'getTitlesForSubjectClass');
+        Route::post('/orderExplanations', 'orderExplanations');
+        Route::post('/approveorderExplanation/{id}', 'approveorderExplanation');
+        Route::get('/getAllOrderExplanations', 'getAllOrderExplanations');
+        Route::get('/getChildOrderExplanations', 'getChildOrderExplanations');
+        Route::get('/OrderExplanationDetails/{id}', 'OrderExplanationDetails');
+        Route::get('/getUserPendingExplanations', 'getUserPendingExplanations');
+        Route::get('/getAllPendingExplanations', 'getAllPendingExplanations');
+        Route::get('/getUserUploadedExplanations', 'getUserUploadedExplanations');
+        Route::get('/getAllUploadedExplanations', 'getAllUploadedExplanations');
+        Route::get('/getUserRejectedExplanations', 'getUserRejectedExplanations');
+        Route::get('/getAllRejectedExplanations', 'getAllRejectedExplanations');
+        Route::get('/getUserApprovedExplanations', 'getUserApprovedExplanations');
+        Route::get('/getAllApprovedExplanations', 'getAllApprovedExplanations');
+        Route::get('/getExplanationsByTitle/{id}', 'getExplanationsByTitle');
+        Route::get('/createAccessToken', 'createAccessToken');
+        Route::post('/uploadImage', 'uploadImage');
+        Route::post('/uploadImageToken', 'uploadImageToken');
+
+        Route::post('/approveExplanation/{id}', 'approveExplanation');
+        Route::post('/rejectedExplanation/{id}', 'rejectedExplanation');
+
+
+
+
+
+   });

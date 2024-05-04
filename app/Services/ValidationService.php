@@ -91,5 +91,26 @@ class ValidationService
         }
     }
 
+    public function validateorderExplanations(array $data)
+    {
+
+
+        $rules = [
+            'user_id' => 'required|exists:users,id',
+            'subject_class_id' => 'required|exists:subject_classes,id',
+            'title_id' => 'required|exists:titles,id',
+            'note' => 'nullable|string',
+
+        ];
+
+
+
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            throw new \InvalidArgumentException($validator->errors()->first());
+        }
+    }
+
 
 }

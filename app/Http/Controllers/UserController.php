@@ -120,7 +120,7 @@ class UserController extends Controller
     }
 
     /**
-    * Filter children based on the request parameters.
+    * Filter children based on the request parameters (filter_type).
     */
 
     public function filterChildren(Request $request)

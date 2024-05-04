@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('order_explanation_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->enum('state', ['pending', 'approved', 'rejected', 'uploaded'])->default('pending');
-            $table->string('video');
+            $table->string('video')->nullable();
             $table->timestamps();
         });
     }
