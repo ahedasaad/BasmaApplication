@@ -47,7 +47,7 @@ class EducationController extends Controller
     {
         try {
             $classroom = $this->educationService->getAllClassroom();
-            return response()->json($classroom);
+            return response()->json(['data'=>$classroom]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

@@ -41,6 +41,18 @@ class UserService
     }
 
     /**
+     * Add a new Representative.
+     */
+    public function addRepresentative(array $data)
+    {
+        $this->validationService->validateAddUser($data);
+
+        $data['account_type'] = isset($data['account_type']) ? $data['account_type'] : 'representative';
+        $data['password'] = Hash::make($data['password']);
+        return $this->userRepository->create($data);
+    }
+
+    /**
      * Create a new child user.
      */
     public function createChild(array $data)

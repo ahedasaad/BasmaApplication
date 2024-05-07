@@ -41,6 +41,23 @@ class UserController extends Controller
     }
 
     /**
+     * Add a new Representative.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addRepresentative(Request $request)
+    {
+        try {
+            // Add employee
+            $representative = $this->userService->addRepresentative($request->all());
+            return response()->json($representative);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
      * Add a new Child.
      *
      * @param  \Illuminate\Http\Request  $request
