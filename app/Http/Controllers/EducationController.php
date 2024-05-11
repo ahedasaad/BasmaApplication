@@ -47,7 +47,7 @@ class EducationController extends Controller
     {
         try {
             $classroom = $this->educationService->getAllClassroom();
-            return response()->json($classroom);
+            return response()->json(['data'=>$classroom]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -357,20 +357,20 @@ class EducationController extends Controller
 
     }
 
-    public function uploadImage(Request $request)
-    {
-        try {
-
-            $image = $request->file('image');
-            $uploadedFileUrl = Cloudinary::uploadFile($request->file('image')->getRealPath())->getSecurePath();
-
-            return response()->json(['token' => $uploadedFileUrl]);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-
-
-    }
+//    public function uploadImage(Request $request)
+//    {
+//        try {
+//
+//            $image = $request->file('image');
+//            $uploadedFileUrl = Cloudinary::uploadFile($request->file('image')->getRealPath())->getSecurePath();
+//
+//            return response()->json(['token' => $uploadedFileUrl]);
+//        } catch (\Exception $e) {
+//            return response()->json(['error' => $e->getMessage()], 500);
+//        }
+//
+//
+//    }
 
     public function createAccessToken()
     {

@@ -47,12 +47,15 @@ Route::prefix('users')
     ->group(function () {
         //Admin
         Route::post('/addEmployee', 'addEmployee');
+        Route::post('/addRepresentative', 'addRepresentative');
         Route::post('/updateUser/{id}', 'updateUser');
         Route::delete('/deleteUser/{id}', 'deleteUser');
         Route::get('/showUserInfo/{id}', 'showUserInfo');
         Route::post('/addChild', 'addChild');
         Route::get('/getAllChildren', 'getAllChildren');
         Route::post('/filterChildren', 'filterChildren');
+
+
 
     });
 /*
