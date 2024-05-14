@@ -21,7 +21,7 @@ class PostResource extends JsonResource
             'image_profile' => $this->user->child_profile?->image,
             'post_category' => $this->post_category,
             'state' => $this->state,
-            'image' => $this->image,
+            'image' => $this->image ? asset('storage/' . $this->image) : null,
             'text' => $this->text,
             'like_count' => $this->likes_count,
             'created_at' => $this->created_at->format('Y-m-d'),
