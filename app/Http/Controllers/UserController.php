@@ -117,7 +117,7 @@ class UserController extends Controller
     {
         try {
             $userInfo = $this->userService->showUserInfo($id);
-            return response()->json($userInfo);
+            return response()->json(['data'=>$userInfo]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }

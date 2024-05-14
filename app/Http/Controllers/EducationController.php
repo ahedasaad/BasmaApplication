@@ -47,7 +47,7 @@ class EducationController extends Controller
     {
         try {
             $classroom = $this->educationService->getAllClassroom();
-            return response()->json(['data'=>$classroom]);
+            return response()->json(['data' => $classroom]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -61,7 +61,7 @@ class EducationController extends Controller
         try {
 
             $subjects = $this->educationService->getSubjectsForClassroom($classroomId);
-            return response()->json($subjects);
+            return response()->json(['data'=>$subjects]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -75,7 +75,7 @@ class EducationController extends Controller
     {
         $titles = $this->educationService->getTitlesForSubjectClass($subjectClassId);
 
-        return response()->json($titles);
+        return response()->json(['data'=>$titles]);
     }
 
     /**
@@ -162,6 +162,7 @@ class EducationController extends Controller
         }
 
     }
+
     public function getAllPendingExplanations()
     {
         try {
@@ -310,112 +311,17 @@ class EducationController extends Controller
 
     }
 
-
-
-    ///////////////////////////////////////////////////////////////////////////cloudinar
-
-//        try {
-//            Configuration::instance([
-//                'cloud' => [
-//                    'cloud_name' => config('services.cloudinary.cloud_name'),
-//                    'api_key' => config('services.cloudinary.api_key'),
-//                    'api_secret' => config('services.cloudinary.api_secret')
-//                ]
-//            ]);
-    public function cloudinary()
-    {
-
-
-        try {
-            $apiKey = config('cloudinary.api_key');
-            $apiSecret = config('cloudinary.api_secret');
-
-            $client = new Client();
-            $response = $client->post("https://api.cloudinary.com/v1_1/ARWA/generate_auth_token", [
-                'form_params' => [
-                    'api_key' => $apiKey,
-                    'api_secret' => $apiSecret,
-                    'expires_at' => now()->addHours(1)->timestamp, // تحديد صلاحية التوكن
-                    'allowed_formats' => ['jpg', 'jpeg', 'png', 'gif'], // الأذونات المسموح بها للتوكن
-                    // يمكنك إضافة المزيد من الخيارات هنا
-                ]
-            ]);
-
-            // التحقق من صحة الاستجابة
-            if (!empty($response)) {
-                // قراءة جسم الاستجابة كنص
-                $token = $response->getBody()->getContents();
-
-                return response()->json(['token' => $token]);
-            } else {
-                return response()->json(['error' => 'Failed to get token'], 500);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
-
-
-    }
-
-//    public function uploadImage(Request $request)
-//    {
-//        try {
 //
-//            $image = $request->file('image');
-//            $uploadedFileUrl = Cloudinary::uploadFile($request->file('image')->getRealPath())->getSecurePath();
-//
-//            return response()->json(['token' => $uploadedFileUrl]);
-//        } catch (\Exception $e) {
-//            return response()->json(['error' => $e->getMessage()], 500);
-//        }
-//
-//
-//    }
-
-    public function createAccessToken()
-    {
-
-        $folderId = 'c78761149b09548abd7ee4d7201cf19736';
-        $folderAcl = "*/folders/$folderId/*";
-        $authToken = new AuthToken([
-            'key' => '952944418364724',
-            'duration' => 100,
-            'acl' => $folderAcl
-        ]);
-
-        $token = $authToken->generate();
-        return response()->json(['token' => $token]);
-    }
+//CLOUDINARY_CLOUD_NAME=dftvov92g
+//CLOUDINARY_API_KEY=952944418364724
+//CLOUDINARY_API_SECRET=6H2jlDuaNl8ZP-g0oyJWRcB71BU
+//CLOUDINARY_URL=cloudinary://952944418364724:6H2jlDuaNl8ZP-g0oyJWRcB71BU@dftvov92g
 
 
 
-    public function uploadImageUsingToken1(Request $request)
-    {
-        $image = $request->file('image');
-
-        // الحصول على التوكن
-        $token = $this->createAccessToken();
-
-        // رفع الصورة إلى Cloudinary باستخدام التوكن
-        $response = Http::attach(
-            'file', file_get_contents($image), $image->getClientOriginalName()
-        )->post('https://api.cloudinary.com/v1_1/dftvov92g/image/upload', [
-            'upload_preset' => 'ml_default',
-            'folder' => 'arwa2',
-            'upload_token' => $token,
-        ]);
-
-        // يمكنك تنفيذ أي إجراءات إضافية هنا، مثل حفظ معرّف الصورة في قاعدة البيانات
-
-        // إرجاع رد الاستجابة بمعلومات الصورة المرفوعة
-
-        // إرجاع رابط الصورة المرفوعة
-        return response()->json(['image_url' => $response]);
-    }
 
 
-
-    public function uploadImageToken(Request $request)
+    public function uploadSignature(Request $request)
     {
         // Generate timestamp
         $timestamp = time();
@@ -423,31 +329,21 @@ class EducationController extends Controller
         // Upload parameters
         $params = [
             'timestamp' => $timestamp,
-            'upload_preset' => 'ml_default', // Optional: Include your upload preset name
-            // Add other upload parameters as needed
+            'upload_preset' => 'ml_default',
         ];
 
-        // Generate the signature
-        $signature = $this->generateUploadSignature($params);
-
-        // Include the signature in the upload parameters
+        $signature = $this->generateSignature($params);
         $params['signature'] = $signature;
-
-        // Get the uploaded file
         $file = $request->file('image');
-
-        // Perform the upload using the Cloudinary SDK
         $result = Cloudinary::uploadApi()->upload($file->getRealPath(), $params); // Pass the real path of the file
 
-        return $result;
+        return response()->json($result);
     }
 
-    private function generateUploadSignature($params)
+    private function generateSignature($params)
     {
-        // Construct the string to sign using the upload parameters and your Cloudinary API secret
-        $stringToSign = http_build_query($params) . '6H2jlDuaNl8ZP-g0oyJWRcB71BU';
+        $stringToSign = http_build_query($params) .config('cloudinary.api_secret');
 
-        // Generate the signature by hashing the string to sign
         $signature = hash('sha256', $stringToSign);
 
         return $signature;
@@ -456,10 +352,44 @@ class EducationController extends Controller
 
 
 
-}
+    public function uploadImage(Request $request)
+    {
+        // استلام التوقيع الرقمي والمعلومات الأخرى من المشروع الآخر
+        $signature = $this->getSignature();
+        $cloudinary_cloud_name = 'dftvov92g';
+        $cloudinary_api_key = '952944418364724';
 
-//
-//CLOUDINARY_CLOUD_NAME=dftvov92g
-//CLOUDINARY_API_KEY=952944418364724
-//CLOUDINARY_API_SECRET=6H2jlDuaNl8ZP-g0oyJWRcB71BU
-//CLOUDINARY_URL=cloudinary://952944418364724:6H2jlDuaNl8ZP-g0oyJWRcB71BU@dftvov92g
+        //CLOUDINARY_CLOUD_NAME=dftvov92g
+        //CLOUDINARY_API_KEY=952944418364724
+        $image = $request->file('image');
+
+        // إعداد البيانات لرفع الصورة
+        $data = [
+            'file' => $image,
+            'folder' => 'arwa', // المجلد المحدد في حساب Cloudinary
+            'api_key' => $cloudinary_api_key,
+            'signature' => $signature
+        ];
+
+        // إجراء طلب الرفع إلى Cloudinary
+        $response = Cloudinary::uploadApi()->upload($data);
+
+        // إرجاع رد الاستجابة من Cloudinary
+        return response()->json($response);
+    }
+
+    public function getSignature()
+    {
+        // حساب الطابع الزمني بتنسيق timestamp
+        $timestamp = round(microtime(true) * 1000);
+
+        // توليد التوقيع
+        $signature = Cloudinary::apiSignRequest(['timestamp' => $timestamp],"6H2jlDuaNl8ZP-g0oyJWRcB71BU");
+
+        // إرجاع الطابع الزمني والتوقيع كاستجابة JSON
+//        return $signature;
+        return response()->json($signature);
+    }
+
+
+}
