@@ -83,6 +83,7 @@ class PostController extends Controller
                 $postData['image'] = $imagePath;
             }
 
+
             $post = $this->postService->createPost($postData);
 
             $postResource = new PostResource($post);

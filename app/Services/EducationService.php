@@ -112,6 +112,14 @@ class EducationService
             return $this->educationRepository->OrderExplanationDetails($id);
         }
 
+    /**
+     * Retrieve details of an  explanation.
+     */
+    public function ExplanationDetails($id)
+    {
+        return $this->educationRepository->ExplanationDetails($id);
+    }
+
         /**
          * Retrieve pending explanations for the current user.d
          */

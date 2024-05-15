@@ -59,6 +59,9 @@ class EducationRepository
         if (!isset($data['state'])) {
             $data['state'] = 'pending';
         }
+        if (!isset($data['note'])) {
+            $data['note'] = 'nothing';
+        }
         $order = OrderExplanation::create($data);
 
         return $order;
@@ -134,6 +137,14 @@ class EducationRepository
     public function OrderExplanationDetails($id)
     {
         return OrderExplanation::findOrFail($id);
+    }
+
+    /**
+     * Get the details of a specific  explanation by its ID.
+     */
+    public function ExplanationDetails($id)
+    {
+        return Explanation::findOrFail($id);
     }
 
     /**
@@ -237,7 +248,7 @@ class EducationRepository
     public function approveExplanation($explanation)
     {
         $explanation = Explanation::findOrFail($explanation);
-        $explanation->status = 'approved';
+        $explanation->state = 'approved';
         $explanation->save();
         return $explanation;
     }
@@ -248,10 +259,18 @@ class EducationRepository
     public function rejectedExplanation($explanation)
     {
         $explanation = Explanation::findOrFail($explanation);
-        $explanation->status = 'rejected';
+        $explanation->state = 'rejected';
         $explanation->save();
         return $explanation;
     }
 
+    public function saveExplanationUrl($explanationId, $url)
+    {
+        $explanation = Explanation::findOrFail($explanationId);
+        $explanation->state = 'uploaded';
+        $explanation->video = $url;
+        $explanation->save();
+        return $explanation;
+    }
 
 }
