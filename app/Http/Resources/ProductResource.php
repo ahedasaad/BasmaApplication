@@ -21,7 +21,7 @@ class ProductResource extends JsonResource
             'mobile_number' => $this->user->mobile_number? $this->user->mobile_number: null,
             'address' => $this->user->address? $this->user->address :null,
             'category_id' => $this->category_id,
-            'image' => $this->image,
+            'image' => $this->image ? asset('storage/' . $this->image) : null,
             'state' => $this->state,
             'demand_state' => $this->demand_state,
             'price' => $this->price,

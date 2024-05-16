@@ -88,4 +88,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(AccountType::class, 'user_types');
     }
+
+    public function basket()
+    {
+        return $this->hasOne(Basket::class);
+    }
 }

@@ -206,6 +206,7 @@ class AuthController extends Controller
             return response()->json([
                 'token' => $token,
                 'account_type' => 'child',
+                'user_id' => $user->id
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
