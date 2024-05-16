@@ -88,39 +88,43 @@ Route::middleware('auth:api')->prefix('posts')
 */
 
 //middleware('auth:api')->child/
-Route::prefix('education')
+Route::middleware('auth:api')->prefix('education')
     ->controller(EducationController::class)
     ->group(function () {
         Route::get('/getAllClassroom', 'getAllClassroom');
         Route::get('/getSubjectsForClassroom/{id}', 'getSubjectsForClassroom');
         Route::get('/getTitlesForSubjectClass/{id}', 'getTitlesForSubjectClass');
-        Route::post('/orderExplanations', 'orderExplanations');
-        Route::post('/approveorderExplanation/{id}', 'approveorderExplanation');
-        Route::get('/getAllOrderExplanations', 'getAllOrderExplanations');
-        Route::get('/getChildOrderExplanations', 'getChildOrderExplanations');
-        Route::get('/OrderExplanationDetails/{id}', 'OrderExplanationDetails');
-        Route::get('/getUserPendingExplanations', 'getUserPendingExplanations');
-        Route::get('/getAllPendingExplanations', 'getAllPendingExplanations');
-        Route::get('/getUserUploadedExplanations', 'getUserUploadedExplanations');
-        Route::get('/getAllUploadedExplanations', 'getAllUploadedExplanations');
-        Route::get('/getUserRejectedExplanations', 'getUserRejectedExplanations');
-        Route::get('/getAllRejectedExplanations', 'getAllRejectedExplanations');
-        Route::get('/getUserApprovedExplanations', 'getUserApprovedExplanations');
-        Route::get('/getAllApprovedExplanations', 'getAllApprovedExplanations');
         Route::get('/getExplanationsByTitle/{id}', 'getExplanationsByTitle');
-        Route::get('/createAccessToken', 'createAccessToken');
-        Route::post('/uploadImage', 'uploadImage');
-        Route::post('/uploadImageToken', 'uploadImageToken');
-
-        Route::post('/approveExplanation/{id}', 'approveExplanation');
-        Route::post('/rejectedExplanation/{id}', 'rejectedExplanation');
-
-
-
+        Route::get('/ExplanationDetails/{id}', 'ExplanationDetails');
+        Route::post('/orderExplanations', 'orderExplanations');
+        Route::get('/getAllOrderExplanations', 'getAllOrderExplanations');
+        Route::post('/approveorderExplanation/{id}', 'approveorderExplanation');
+        Route::get('/OrderExplanationDetails/{id}', 'OrderExplanationDetails');
+        Route::get('/getChildOrderExplanations', 'getChildOrderExplanations');
+        Route::get('/getUserPendingExplanations', 'getUserPendingExplanations');
+        Route::get('/getUserUploadedExplanations', 'getUserUploadedExplanations');
+        Route::get('/getUserRejectedExplanations', 'getUserRejectedExplanations');
+        Route::get('/getUserApprovedExplanations', 'getUserApprovedExplanations');
+        Route::get('/generateSignature', 'generateSignature');
+        Route::POST('/saveExplanationUrl/{id}', 'saveExplanationUrl');
+        ////JUST FOR TEASTING
+        Route::POST('/uploadToCloudinary', 'uploadToCloudinary');
+        Route::POST('/uploadToCloudinary1', 'uploadToCloudinary1');
+        Route::POST('/uploadVideoToCloudinary', 'uploadVideoToCloudinary');
+        Route::GET('/fetchVideoFromCloudinary', 'fetchVideoFromCloudinary');
+        Route::GET('/fetchVideoFromCloudinary1', 'fetchVideoFromCloudinary1');
 
 
     });
-
+Route::controller(EducationController::class)
+    ->group(function () {
+        Route::get('/getAllPendingExplanations', 'getAllPendingExplanations');
+        Route::get('/getAllUploadedExplanations', 'getAllUploadedExplanations');
+        Route::get('/getAllRejectedExplanations', 'getAllRejectedExplanations');
+        Route::get('/getAllApprovedExplanations', 'getAllApprovedExplanations');
+        Route::post('/approveExplanation/{id}', 'approveExplanation');
+        Route::post('/rejectedExplanation/{id}', 'rejectedExplanation');
+    });
 /*
 |--------------------------------------------------------------------------
 | Products Management
