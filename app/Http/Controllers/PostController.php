@@ -124,14 +124,14 @@ class PostController extends Controller
 
             $postData = [
                 'post_category' => $request->input('post_category'),
-                'state' => $request->input('state'),
-                'text' => $request->input('text'),
+                // 'state' => $request->input('state'),
+                // 'text' => $request->input('text'),
             ];
 
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('photos', 'public');
-                $postData['image'] = $imagePath;
-            }
+            // if ($request->hasFile('image')) {
+            //     $imagePath = $request->file('image')->store('photos', 'public');
+            //     $postData['image'] = $imagePath;
+            // }
 
             $updatedPost = $this->postService->updatePost($post, $postData);
 
@@ -215,7 +215,7 @@ class PostController extends Controller
 
             // Check if the user has already liked the post
             if ($this->likeService->checkIfUserLikedPost($userId, $postId)) {
-                return response()->json(['message' => 'You have already liked this post'], 400);
+                return response()->json(['message' => 'You have already liked this post'], 200);
             }
 
             // Add like for the post
