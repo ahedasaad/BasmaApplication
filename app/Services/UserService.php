@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Http\Resources\ChildResource;
+use App\Models\ChildProfile;
 use App\Repositories\ChildRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Foundation\Auth\User;
@@ -55,19 +57,65 @@ class UserService
     /**
      * Create a new child user.
      */
+//    public function createChild(array $data)
+//    {
+//        $this->validationService->validateAddChild($data);
+//
+//        if ($data->hasFile('image')) {
+//            $image = $data->file('image');
+//            $imageName = $image->getClientOriginalName();
+//            $imagePath = $image->storeAs('posts', $imageName, 'public');
+//
+//            $data['image'] = $imagePath;
+//        }
+//
+//        $data['account_type'] = isset($data['account_type']) ? $data['account_type'] : 'child';
+//        $data['password'] = Hash::make($data['password']);
+//
+//        $user = $this->userRepository->create($data);
+//        $childData = array_merge($data, ['user_id' => $user->id]);
+//        $child = $this->childRepository->create($childData);
+//        $user->child = $child;
+//        return $user;
+//    }
+
     public function createChild(array $data)
     {
         $this->validationService->validateAddChild($data);
+        if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+            $image = $data['image'];
+            $originalName = $image->getClientOriginalName();
 
-        $data['account_type'] = isset($data['account_type']) ? $data['account_type'] : 'child';
+            // Clean the original name
+            $cleanedName = $this->cleanFileName($originalName);
+
+            // Create a unique name
+            $imageName = time() . '_' . $cleanedName;
+            $imagePath = $image->storeAs('children_image', $imageName, 'public');
+
+            // Add the image path to the data array
+            $data['image'] = $imagePath;
+        }
+
+        $data['account_type'] = $data['account_type'] ?? 'child';
         $data['password'] = Hash::make($data['password']);
 
         $user = $this->userRepository->create($data);
         $childData = array_merge($data, ['user_id' => $user->id]);
         $child = $this->childRepository->create($childData);
         $user->child = $child;
-        return $user;
+        $children = ChildProfile::with('user')->get();
+        return ChildResource::collection($children);
     }
+
+    private function cleanFileName($fileName)
+    {
+        $fileName = preg_replace('/[^A-Za-z0-9\-\_\.]/', '_', $fileName);
+
+        // Return the cleaned file name
+        return $fileName;
+    }
+
 
     /**
      * Update user information.
@@ -87,6 +135,12 @@ class UserService
         if ($user->account_type == 'child') {
             $child = $this->childRepository->findChildByUserId($userId);
 
+            if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+                $image = $data['image'];
+                $imagePath = $image->store('children_image', 'public');
+                $data['image'] = $imagePath;
+            }
+
             if (!$child) {
                 throw new \Exception('الطفل غير موجود');
             }
@@ -94,7 +148,8 @@ class UserService
             $this->childRepository->update($child, $data);
         }
 
-        return $user;
+        $children = ChildProfile::with('user')->get();
+        return ChildResource::collection($children);
     }
 
     /**
