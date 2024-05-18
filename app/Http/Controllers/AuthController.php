@@ -26,13 +26,11 @@ class AuthController extends Controller
                 'name' => 'required|string',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:6',
-                'mobile_number' => 'required|string',
             ]);
             $user = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
-                'mobile_number' => $request->input('mobile_number'),
                 'account_type' => 'donor',
             ]);
 
@@ -206,7 +204,10 @@ class AuthController extends Controller
             return response()->json([
                 'token' => $token,
                 'account_type' => 'child',
-                'user_id' => $user->id
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'user_name' => $user->user_name,
+                'image' => $user->child_profile->image,
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

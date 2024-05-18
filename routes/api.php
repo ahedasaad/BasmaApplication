@@ -72,7 +72,7 @@ Route::middleware('auth:api')->prefix('posts')
         Route::get('/{id}', 'show');
         Route::post('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
-        Route::post('/post/filter', 'filter');
+        Route::get('/post/filter', 'filter');
         Route::post('/accept/{id}', 'acceptPost');
         Route::post('/unaccept/{id}', 'unacceptPost');
         Route::get('/user/get_user_posts', 'getUserPosts');

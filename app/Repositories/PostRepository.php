@@ -49,7 +49,7 @@ class PostRepository
             $query->where('post_category', '=', $postCategory);
         }
 
-        return $query->get();
+        return $query->withCount('likes')->get();
     }
 
     public function acceptPost($id)
