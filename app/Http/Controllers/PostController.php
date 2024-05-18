@@ -115,9 +115,9 @@ class PostController extends Controller
         try {
             $request->validate([
                 'post_category' => 'in:story,activity,other',
-                'state' => 'in:pending,approved,rejected',
-                'text' => 'nullable|string|max:5000',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                // 'state' => 'in:pending,approved,rejected',
+                // 'text' => 'nullable|string|max:5000',
+                // 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             $post = $this->postService->findPostById($id);

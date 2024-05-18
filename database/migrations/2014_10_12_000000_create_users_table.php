@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
-            $table->string('mobile_number');
+            $table->string('mobile_number')->nullable();
             $table->string('user_name')->unique()->nullable();
             $table->enum('account_type', ['donor','child','admin','employee','representative'])->default('donor');
             $table->string('address')->nullable();

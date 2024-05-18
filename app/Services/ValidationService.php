@@ -49,7 +49,7 @@ class ValidationService
             'healing_date' => 'nullable|date',
             'disease_type' => 'nullable|string',
             'note' => 'nullable|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ];
 
         $validator = Validator::make($data, $rules);
