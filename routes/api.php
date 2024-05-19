@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\BuyingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,6 +126,7 @@ Route::controller(EducationController::class)
         Route::post('/approveExplanation/{id}', 'approveExplanation');
         Route::post('/rejectedExplanation/{id}', 'rejectedExplanation');
     });
+
 /*
 |--------------------------------------------------------------------------
 | Products Management
@@ -140,7 +142,39 @@ Route::middleware('auth:api')->prefix('products')
         Route::get('/{id}', 'show');
         Route::post('/{id}', 'update');
         Route::delete('/{id}', 'destroy');
-        Route::post('/product/filter', 'filter');
+        Route::get('/product/filter', 'filter');
         Route::post('/accept/{id}', 'acceptProduct');
         Route::post('/unaccept/{id}', 'unacceptProduct');
+        Route::get('/product/pending', 'getPendingProducts');
+        Route::get('/product/rejected', 'getRejectedProducts');
+        Route::get('/user/get_user_products', 'getUserProducts');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| Buying Management
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware('auth:api')->prefix('baskets')
+    ->controller(BuyingController::class)
+    ->group(function () {
+        Route::get('/', 'showUserBasket');
+        Route::post('/{productId}', 'addToBasket');
+        Route::delete('/remove/{productId}', 'removeFromBasket');
+    });
+
+    Route::middleware('auth:api')->prefix('orders')
+    ->controller(BuyingController::class)
+    ->group(function () {
+        Route::post('/', 'placeOrder');
+        Route::get('/{orderId}', 'showOrder');
+        Route::get('/pending', 'getPendingOrders');
+        Route::get('/received', 'getReceivedOrders');
+        Route::get('/unreceived', 'getUnreceivedOrders');
+        Route::get('/done', 'getDoneOrders');
+        Route::post('/order/received/{orderId}', 'updateOrderState');
+        Route::post('/order/done/{orderId}', 'updateOrderStateToDone');
+        Route::post('/order/unreceived/{orderId}', 'updateOrderStateToUnreceived');
+        Route::get('/user/get_user_orders', 'getUserOrders');
     });

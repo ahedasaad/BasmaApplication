@@ -23,4 +23,12 @@ class Basket extends Model
     {
         return $this->belongsToMany(Product::class, 'basket_products');
     }
+    
+    public static function ensureUserBasket($userId)
+    {
+        return self::firstOrCreate(
+            ['user_id' => $userId],
+            ['total_price' => 0]
+        );
+    }
 }

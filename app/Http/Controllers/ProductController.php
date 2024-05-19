@@ -49,7 +49,9 @@ class ProductController extends Controller
                 'category_id' => 'exists:categories,id',
                 'name' => 'string',
                 'image' => 'image|mimes:jpeg,png,jpg|max:2048',
-                'state' => 'string',
+                'state' => 'in:used,new',
+                'mobile_number' => 'string',
+                'address' => 'string',
             ]);
 
             $user = User::find(auth()->id());
@@ -69,16 +71,16 @@ class ProductController extends Controller
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = $image->getClientOriginalName();
-                $imagePath = $image->storeAs('products', $imageName, 'public'); // Store image in 'public/products' directory
+                $imagePath = $image->storeAs('products', $imageName, 'public');
 
-                $productData['image'] = $imagePath; // Save image path to product data
+                $productData['image'] = $imagePath; 
             }
 
-            // Update user data with mobile_number and address
-            // $userData = $request->only(['mobile_number', 'address']); // Assuming these fields are part of the request
-            // $user->update($userData);
-
             $product = $this->productService->createProduct($productData);
+
+            // Update user data with mobile_number and address
+            $userData = $request->only(['mobile_number', 'address']);
+            $user->update($userData);
 
             $productResource = new ProductResource($product);
             return response()->json(['data ' => $productResource], 201);
@@ -177,6 +179,43 @@ class ProductController extends Controller
     {
         try {
             $products = $this->productService->getProductsByCategory($categoryId);
+            return ProductResource::collection($products);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getPendingProducts()
+    {
+        try {
+            $products = $this->productService->pendingProduct();
+            return ProductResource::collection($products);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getRejectedProducts()
+    {
+        try {
+            $products = $this->productService->rejectedProduct();
+            return ProductResource::collection($products);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function getUserProducts(Request $request)
+    {
+        try {
+            $user = auth()->user();
+
+            if (!$user) {
+                return response()->json(['message' => 'User not found'], 404);
+            }
+
+            $products = $this->productService->myProducts($user);
+
             return ProductResource::collection($products);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

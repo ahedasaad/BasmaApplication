@@ -62,4 +62,19 @@ class ProductService
     {
         return $this->productRepository->unacceptProduct($id);
     }
+
+    public function pendingProduct()
+    {
+        return $this->productRepository->getPendingProduct();
+    }
+
+    public function rejectedProduct()
+    {
+        return $this->productRepository->getRejectedProduct();
+    }
+
+    public function myProducts($user)
+    {
+        return $this->productRepository->getMyProducts($user);
+    }
 }

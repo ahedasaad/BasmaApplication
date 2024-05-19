@@ -79,4 +79,19 @@ class ProductRepository
         $product->save();
         return $product;
     }
+
+    public function getPendingProduct()
+    {
+        return Product::where('demand_state', 'pending')->get();
+    }
+
+    public function getRejectedProduct()
+    {
+        return Product::where('demand_state', 'rejected')->get();
+    }
+
+    public function getMyProducts($user)
+    {
+        return $user->products()->paginate(10);
+    }
 }

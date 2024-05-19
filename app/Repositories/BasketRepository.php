@@ -2,81 +2,39 @@
 
 namespace App\Repositories;
 
+use App\Models\Basket;
 use App\Models\Product;
-use App\Models\Category;
 
 class BasketRepository
 {
-    public function getAllCategory()
+    public function getUserBasket($userId)
     {
-        return Category::get();
+        return Basket::ensureUserBasket($userId);
     }
 
-    public function getAllPaginated()
+    public function addProductToBasket($basket, $productId)
     {
-        return Product::paginate(10);
+        $product = Product::findOrFail($productId);
+        $basket->products()->attach($productId);
+
+        return $basket;
     }
 
-    public function getByCategory($categoryId)
+    public function removeProductFromBasket($basket, $productId)
     {
-        return Product::where('category_id', $categoryId)
-            ->where('demand_state', 'approved')
-            ->paginate(10);
+        $product = Product::findOrFail($productId);
+        $basket->products()->detach($productId);
+
+        return $basket;
     }
 
-    public function create(array $attributes)
+    public function clearBasket($userId)
     {
-        return Product::create($attributes);
-    }
-
-    public function findById($id)
-    {
-        return Product::findOrFail($id);
-    }
-
-    public function update(Product $product, array $attributes)
-    {
-        $product->update($attributes);
-        return $product;
-    }
-
-    public function delete($id)
-    {
-        $product = Product::findOrFail($id);
-        return $product->delete();
-    }
-
-    public function filterProducts(array $attributes)
-    {
-        $categoryId = $attributes['category_id'] ?? null;
-        $state = $attributes['state'] ?? null;
-
-        $query = Product::query();
-
-        if ($categoryId != null) {
-            $query->where('category_id', '=', $categoryId);
+        $basket = Basket::where('user_id', $userId)->first();
+        if ($basket) {
+            $basket->products()->detach();
+            $basket->total_price = 0;
+            $basket->save();
         }
-
-        if ($state != null) {
-            $query->where('state', '=', $state);
-        }
-
-        return $query->get();
-    }
-
-    public function acceptProduct($id)
-    {
-        $product = Product::findOrFail($id);
-        $product->demand_state = 'approved';
-        $product->save();
-        return $product;
-    }
-
-    public function unacceptProduct($id)
-    {
-        $product = Product::findOrFail($id);
-        $product->demand_state = 'rejected';
-        $product->save();
-        return $product;
     }
 }

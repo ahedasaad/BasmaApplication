@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->string('image');
-            $table->string('state'); //مستعمل، جديد
+            $table->enum('state',['used','new']); //مستعمل، جديد
             $table->enum('demand_state', ['pending', 'approved', 'rejected'])->default('pending');
             $table->integer('price')->default(0);
             $table->timestamps();
