@@ -14,11 +14,10 @@ class ChildResource extends JsonResource
      */
     public function toArray($request)
     {
-        $userData = $this->user->only(['name', 'email', 'email_verified_at', 'mobile_number', 'user_name', 'account_type', 'address', 'is_active']);
+        $userData = $this->user->only(['name', 'mobile_number', 'user_name', 'account_type', 'address', 'is_active']);
 
         return [
             'name' => $userData['name'],
-            'email' => $userData['email'],
             'mobile_number' => $userData['mobile_number'],
             'user_name' => $userData['user_name'],
             'account_type' => $userData['account_type'],
@@ -33,7 +32,7 @@ class ChildResource extends JsonResource
                 'healing_date' => $this->healing_date,
                 'disease_type' => $this->disease_type,
                 'note' => $this->note,
-                'image' => $this->image,
+                'image' => $this->image ? asset('storage/' . $this->image) : null,
             ]
         ];
     }

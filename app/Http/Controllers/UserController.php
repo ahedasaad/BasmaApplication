@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ChildResource;
+use App\Http\Resources\PostResource;
 use App\Models\ChildProfile;
 use Illuminate\Http\Request;
 use App\Services\UserService;
@@ -67,6 +69,7 @@ class UserController extends Controller
     {
         try {
             $child = $this->userService->createChild($request->all());
+//            $childResource = new ChildResource($child);
             return response()->json( $child);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);

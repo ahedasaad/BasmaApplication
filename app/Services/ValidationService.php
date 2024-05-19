@@ -49,7 +49,7 @@ class ValidationService
             'healing_date' => 'nullable|date',
             'disease_type' => 'nullable|string',
             'note' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
 
         $validator = Validator::make($data, $rules);
@@ -70,8 +70,8 @@ class ValidationService
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'user_name' => 'required|string',
-           'mobile_number' => 'nullable|string|min:10|max:15|unique:users',
+            'user_name' => 'required|string|unique:users',
+            'mobile_number' => 'nullable|string|min:10|max:15|unique:users',
             'address' => 'nullable|string',
 
             'birthdate' => 'required|date',
@@ -81,8 +81,10 @@ class ValidationService
             'healing_date' => 'required|date',
             'disease_type' => 'required|string',
             'note' => 'nullable|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
+
+
 
         $validator = Validator::make($data, $rules);
 
