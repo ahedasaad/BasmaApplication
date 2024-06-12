@@ -48,6 +48,11 @@ class OrderService
         return $this->orderRepository->getDoneOrders();
     }
 
+    public function acceptOrder($orderId)
+    {
+        return $this->orderRepository->updateOrderStateToAccept($orderId);
+    }
+
     public function updateOrderState($orderId)
     {
         return $this->orderRepository->updateOrderStateToReceived($orderId);

@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->enum('state', ['pending', 'received', 'unreceived', 'done'])->default('pending');
+            $table->foreignId('representative_id')->nullable()->constrained('users')->onDelete('set null');
+            $table->enum('state', ['pending', 'accept', 'received', 'unreceived', 'done'])->default('pending');
             $table->string('mobile_number');
             $table->string('address');
             $table->text('note')->nullable();

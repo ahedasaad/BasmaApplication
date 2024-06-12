@@ -156,6 +156,17 @@ class BuyingController extends Controller
         }
     }
 
+    public function acceptOrder($orderId)
+    {
+        try {
+            $order = $this->orderService->acceptOrder($orderId);
+
+            return response()->json(['message' => 'Order Received successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function updateOrderState($orderId)
     {
         try {
