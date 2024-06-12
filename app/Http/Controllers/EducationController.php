@@ -334,6 +334,13 @@ class EducationController extends Controller
 
     }
 
+    
+    //CLOUDINARY_UPLOAD_PRESET=ml_default
+    //CLOUDINARY_CLOUD_NAME=dftvov92g
+    //CLOUDINARY_API_KEY=464627112571591
+    //CLOUDINARY_API_SECRET=8JFiG3bxjkOVnGaN-oRPKCTObto
+    //CLOUDINARY_URL=cloudinary://464627112571591:8JFiG3bxjkOVnGaN-oRPKCTObto@dftvov92g
+
     public function generateSignature1()
     {
         try {
