@@ -18,6 +18,7 @@ class BuyingResource extends JsonResource
             'id' => $this->id,
             'user_id' => $this->user_id,
             'product_id' => $this->product_id,
+            'representative_id' => $this->representative_id? $this->representative_id: null,
             'state' => $this->state,
             'mobile_number' => $this->mobile_number,
             'address' => $this->address,

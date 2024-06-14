@@ -70,6 +70,11 @@ class User extends Authenticatable
         return $this->hasMany(BuyProduct::class);
     }
 
+    public function representative_products()
+    {
+        return $this->hasMany(BuyProduct::class, 'representative_id');
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);

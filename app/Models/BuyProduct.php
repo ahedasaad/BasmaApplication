@@ -12,6 +12,7 @@ class BuyProduct extends Model
     protected $fillable = [
         'user_id',
         'product_id',
+        'representative_id',
         'state',
         'mobile_number',
         'address',
@@ -26,5 +27,10 @@ class BuyProduct extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function representative()
+    {
+        return $this->belongsTo(User::class, 'representative_id');
     }
 }

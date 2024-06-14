@@ -164,7 +164,7 @@ Route::middleware('auth:api')->prefix('baskets')
         Route::delete('/remove/{productId}', 'removeFromBasket');
     });
 
-    Route::middleware('auth:api')->prefix('orders')
+Route::middleware('auth:api')->prefix('orders')
     ->controller(BuyingController::class)
     ->group(function () {
         Route::post('/', 'placeOrder');

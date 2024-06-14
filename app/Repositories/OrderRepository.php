@@ -41,6 +41,16 @@ class OrderRepository
         return BuyProduct::where('state', 'done')->get();
     }
 
+    public function updateOrderStateToAccept($orderId)
+    {
+        $order = BuyProduct::findOrFail($orderId);
+        $order->state = 'accept';
+        $order->representative_id = auth()->id();
+        
+        $order->save();
+
+        return $order;
+    }
     public function updateOrderStateToReceived($orderId)
     {
         $order = BuyProduct::findOrFail($orderId);
