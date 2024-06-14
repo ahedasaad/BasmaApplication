@@ -43,7 +43,7 @@ Route::prefix('user_register')
 Route::middleware('auth:api')->post('/logout', [AuthController::class, 'logout']);
 Route::middleware('auth:api')->post('/change/change_password', [AuthController::class, 'changePassword']);
 
-Route::prefix('users')
+Route::middleware('auth:api')->prefix('users')
     ->controller(UserController::class)
     ->group(function () {
         //Admin
@@ -88,7 +88,7 @@ Route::middleware('auth:api')->prefix('posts')
 |--------------------------------------------------------------------------
 */
 
-//middleware('auth:api')->child/
+//middleware('auth:api')->child/donor
 Route::middleware('auth:api')->prefix('education')
     ->controller(EducationController::class)
     ->group(function () {
@@ -117,7 +117,7 @@ Route::middleware('auth:api')->prefix('education')
 
 
     });
-Route::controller(EducationController::class)
+Route::middleware('auth:api')->controller(EducationController::class)
     ->group(function () {
         Route::get('/getAllPendingExplanations', 'getAllPendingExplanations');
         Route::get('/getAllUploadedExplanations', 'getAllUploadedExplanations');

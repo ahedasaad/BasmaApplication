@@ -76,9 +76,8 @@ class ValidationService
 
             'birthdate' => 'required|date',
             'date_of_join' => 'required|date',
-            'date_of_exit' => 'required|date',
             'starting_disease' => 'required|date',
-            'healing_date' => 'required|date',
+
             'disease_type' => 'required|string',
             'note' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

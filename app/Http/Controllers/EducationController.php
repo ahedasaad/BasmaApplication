@@ -334,7 +334,7 @@ class EducationController extends Controller
 
     }
 
-    
+
     //CLOUDINARY_UPLOAD_PRESET=ml_default
     //CLOUDINARY_CLOUD_NAME=dftvov92g
     //CLOUDINARY_API_KEY=464627112571591
