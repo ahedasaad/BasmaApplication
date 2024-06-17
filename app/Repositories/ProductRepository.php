@@ -24,6 +24,12 @@ class ProductRepository
             ->paginate(10);
     }
 
+    public function getProducts()
+    {
+        return Product::where('demand_state', 'approved')
+            ->paginate(20);
+    }
+
     public function create(array $attributes)
     {
         return Product::create($attributes);

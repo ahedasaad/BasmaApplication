@@ -136,6 +136,7 @@ Route::middleware('auth:api')->prefix('products')
     ->controller(ProductController::class)
     ->group(function () {
         Route::get('/', 'index');
+        Route::get('/market', 'getMarketPrdoucts');
         Route::get('/category/all', 'getAllCategories');
         Route::get('/category/{categoryId}', 'getProductsByCategory');
         Route::post('/', 'store');

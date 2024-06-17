@@ -29,6 +29,17 @@ class ProductController extends Controller
         }
     }
 
+    public function getMarketPrdoucts()
+    {
+        try{
+            $products = $this->productService->getProducts();
+
+            return ProductResource::collection($products);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function getAllCategories()
     {
         try {

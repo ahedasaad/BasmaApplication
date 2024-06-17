@@ -28,6 +28,11 @@ class ProductService
         return $this->productRepository->getByCategory($categoryId);
     }
 
+    public function getProducts()
+    {
+        return $this->productRepository->getProducts();
+    }
+
     public function createProduct(array $attributes)
     {
         return $this->productRepository->create($attributes);
