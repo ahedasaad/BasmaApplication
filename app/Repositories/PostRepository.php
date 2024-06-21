@@ -16,7 +16,9 @@ class PostRepository
 
     public function getAll()
     {
-        return Post::withCount('likes')->paginate(10);
+        return Post::where('state', 'pending')
+            ->withCount('likes')
+            ->paginate(10);
     }
 
     public function create(array $attributes)
