@@ -14,6 +14,20 @@ class ProductController extends Controller
     public function __construct(ProductService $productService)
     {
         $this->productService = $productService;
+
+        // $this->middleware(['permission:get_all_products'], ['only' => ['index', 'show']]);
+        // $this->middleware(['permission:get_approved_products'], ['only' => ['getMarketPrdoucts', 'show']]);
+        // $this->middleware(['permission:get_products_by_category'], ['only' => ['getProductsByCategory', 'show']]);
+        // $this->middleware(['permission:get_all_categories'], ['only' => ['getAllCategories']]);
+        // $this->middleware(['permission:create_product'], ['only' => ['store']]);
+        // $this->middleware(['permission:update_product'], ['only' => ['update']]);
+        // $this->middleware(['permission:delete_product'], ['only' => ['destroy']]);
+        // $this->middleware(['permission:filter_product'], ['only' => ['filter']]);
+        // $this->middleware(['permission:accept_product'], ['only' => ['acceptProduct']]);
+        // $this->middleware(['permission:unaccept_product'], ['only' => ['unacceptProduct']]);
+        // $this->middleware(['permission:get_user_products'], ['only' => ['getUserProducts']]);
+        // $this->middleware(['permission:get_pending_products'], ['only' => ['getPendingProducts']]);
+        // $this->middleware(['permission:get_rejected_products'], ['only' => ['getRejectedProducts']]);
     }
 
     /**
@@ -228,6 +242,16 @@ class ProductController extends Controller
             $products = $this->productService->myProducts($user);
 
             return ProductResource::collection($products);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function countProducts()
+    {
+        try{
+            $countProduct = $this->productService->getProductCount();
+            return response()->json(['total_records = ' => $countProduct]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

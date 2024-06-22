@@ -69,8 +69,8 @@ class UserController extends Controller
     {
         try {
             $child = $this->userService->createChild($request->all());
-//            $childResource = new ChildResource($child);
-            return response()->json( $child);
+            //            $childResource = new ChildResource($child);
+            return response()->json($child);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
@@ -120,7 +120,7 @@ class UserController extends Controller
     {
         try {
             $userInfo = $this->userService->showUserInfo($id);
-            return response()->json(['data'=>$userInfo]);
+            return response()->json(['data' => $userInfo]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
@@ -133,15 +133,15 @@ class UserController extends Controller
     {
         try {
             $children = $this->userService->getAllChildren();
-            return response()->json( $children);
+            return response()->json($children);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
     }
 
     /**
-    * Filter children based on the request parameters (filter_type).
-    */
+     * Filter children based on the request parameters (filter_type).
+     */
 
     public function filterChildren(Request $request)
     {
@@ -153,7 +153,23 @@ class UserController extends Controller
         }
     }
 
+    public function countDonors()
+    {
+        try {
+            $donorCount = $this->userService->getDonorCount();
+            return response()->json(['total_records = ' => $donorCount]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
-
-
+    public function countChilds()
+    {
+        try {
+            $childCount = $this->userService->getChildCount();
+            return response()->json(['total_records = ' => $childCount]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }
