@@ -82,4 +82,9 @@ class ProductService
     {
         return $this->productRepository->getMyProducts($user);
     }
+
+    public function getProductCount()
+    {
+        return $this->productRepository->countProduct();
+    }
 }

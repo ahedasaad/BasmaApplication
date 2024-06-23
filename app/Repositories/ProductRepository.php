@@ -27,7 +27,7 @@ class ProductRepository
     public function getProducts()
     {
         return Product::where('demand_state', 'approved')
-            ->paginate(20);
+            ->paginate(10);
     }
 
     public function create(array $attributes)
@@ -99,5 +99,11 @@ class ProductRepository
     public function getMyProducts($user)
     {
         return $user->products()->paginate(10);
+    }
+
+    public function countProduct()
+    {
+        $productCount = Product::where('demand_state', 'approved')->count();
+        return $productCount;
     }
 }

@@ -57,10 +57,11 @@ Route::middleware('auth:api')->prefix('users')
         Route::post('/addChild', 'addChild');
         Route::get('/getAllChildren', 'getAllChildren');
         Route::post('/filterChildren', 'filterChildren');
-
-
-
+        Route::get('/donor/total', 'countDonors');
+        Route::get('/child/total', 'countChilds');
     });
+
+
 /*
 |--------------------------------------------------------------------------
 | Posts Management
@@ -81,6 +82,7 @@ Route::middleware('auth:api')->prefix('posts')
         Route::get('/user/get_user_posts', 'getUserPosts');
         Route::post('/like/{postId}', 'addLike');
         Route::post('/remove/like/{postId}', 'removeLike');
+        Route::get('/post/total', 'countPosts');
     });
 
 
@@ -119,7 +121,8 @@ Route::middleware('auth:api')->prefix('education')
 
 
     });
-Route::middleware('auth:api')->controller(EducationController::class)
+Route::middleware('auth:api')
+    ->controller(EducationController::class)
     ->group(function () {
         Route::get('/getAllPendingExplanations', 'getAllPendingExplanations');
         Route::get('/getAllUploadedExplanations', 'getAllUploadedExplanations');
@@ -151,6 +154,7 @@ Route::middleware('auth:api')->prefix('products')
         Route::get('/product/pending', 'getPendingProducts');
         Route::get('/product/rejected', 'getRejectedProducts');
         Route::get('/user/get_user_products', 'getUserProducts');
+        Route::get('/product/total', 'countProducts');
     });
 
 /*

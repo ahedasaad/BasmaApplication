@@ -63,4 +63,16 @@ class UserRepository
         return $user->toArray();
     }
 
+    public function countDonor()
+    {
+        $donorCount = User::where('account_type', 'donor')->count();
+        return $donorCount;
+    }
+
+    public function countChild()
+    {
+        $childCount = User::where('account_type', 'child')->count();
+        return $childCount;
+    }
+
 }

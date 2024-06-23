@@ -63,4 +63,9 @@ class PostService
     {
         return $this->postRepository->getUserPosts($user);
     }
+
+    public function getPostCount()
+    {
+        return $this->postRepository->countPost();
+    }
 }

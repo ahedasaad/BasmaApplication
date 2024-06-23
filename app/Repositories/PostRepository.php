@@ -74,4 +74,10 @@ class PostRepository
     {
         return $user->posts()->paginate(10);
     }
+
+    public function countPost()
+    {
+        $postCount = Post::where('state', 'approved')->count();
+        return $postCount;
+    }
 }

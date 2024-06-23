@@ -288,8 +288,13 @@ class UserService
         }
     }
 
+    public function getDonorCount()
+    {
+        return $this->userRepository->countDonor();
+    }
 
-
-
-
+    public function getChildCount()
+    {
+        return $this->userRepository->countChild();
+    }
 }
