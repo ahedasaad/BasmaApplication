@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\ChildProfile;
 use App\Models\User;
 
 class UserRepository

@@ -50,7 +50,9 @@ Route::middleware('auth:api')->prefix('users')
         Route::post('/addEmployee', 'addEmployee');
         Route::post('/addRepresentative', 'addRepresentative');
         Route::post('/updateUser/{id}', 'updateUser');
+        Route::post('/updateChild/{id}', 'updateChild');
         Route::delete('/deleteUser/{id}', 'deleteUser');
+        Route::delete('/deleteChild/{id}', 'deleteChild');
         Route::get('/showUserInfo/{id}', 'showUserInfo');
         Route::post('/addChild', 'addChild');
         Route::get('/getAllChildren', 'getAllChildren');
