@@ -43,6 +43,22 @@ class UserController extends Controller
     }
 
     /**
+     * get All Employees
+     */
+
+    public function getAllEmployees()
+    {
+        try {
+            // Get all employees
+            $employees = $this->userService->getAllEmployees();
+            return response()->json($employees);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+
+    /**
      * Add a new Representative.
      *
      * @param  \Illuminate\Http\Request  $request

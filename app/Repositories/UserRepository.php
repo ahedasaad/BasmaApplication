@@ -19,6 +19,18 @@ class UserRepository
             throw new \Exception('خطأ في إنشاء  المستخدم: ' . $e->getMessage());
         }
     }
+    /**
+     * Git All Employee.
+     */
+    public function getAllEmployees()
+    {
+        try {
+            return User::where('account_type', 'employee')->get();
+        } catch (\Exception $e) {
+            throw new \Exception('خطأ في جلب المستخدمين: ' . $e->getMessage());
+        }
+    }
+
 
     /**
      * Finds a user by ID.

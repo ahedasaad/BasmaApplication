@@ -43,6 +43,15 @@ class UserService
     }
 
     /**
+     * Git All employee.
+     */
+    public function getAllEmployees()
+    {
+        return $this->userRepository->getAllEmployees();
+    }
+
+
+    /**
      * Add a new Representative.
      */
     public function addRepresentative(array $data)
