@@ -94,7 +94,7 @@ class EducationController extends Controller
     {
 
 
-        return $this->educationService->orderExplanations($request->all());
+        return $this->educationService->orderExplanations(['data'=>$request->all()]);
     }
 
     /**
@@ -283,7 +283,7 @@ class EducationController extends Controller
 
         try {
             $explanations = $this->educationService->getExplanationsByTitle($titleId);
-            return response()->json($explanations);
+            return response()->json(['data'=>$explanations]);
 
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
