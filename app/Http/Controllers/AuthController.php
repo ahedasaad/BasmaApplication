@@ -207,7 +207,7 @@ class AuthController extends Controller
                 'user_id' => $user->id,
                 'name' => $user->name,
                 'user_name' => $user->user_name,
-                'image' => $user->child_profile->image,
+                'image' => asset('storage/' . $user->child_profile->image),
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
