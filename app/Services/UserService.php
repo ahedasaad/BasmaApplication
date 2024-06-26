@@ -43,6 +43,15 @@ class UserService
     }
 
     /**
+     * Git All employee.
+     */
+    public function getAllEmployees()
+    {
+        return $this->userRepository->getAllEmployees();
+    }
+
+
+    /**
      * Add a new Representative.
      */
     public function addRepresentative(array $data)
@@ -105,7 +114,7 @@ class UserService
         $child = $this->childRepository->create($childData);
         $user->child = $child;
         $children = ChildProfile::with('user')->get();
-        return ChildResource::collection($children);
+        return new ChildResource($children);
     }
 
     private function cleanFileName($fileName)
@@ -146,11 +155,44 @@ class UserService
             }
 
             $this->childRepository->update($child, $data);
-        }
 
-        $children = ChildProfile::with('user')->get();
-        return ChildResource::collection($children);
+            return new ChildResource($child);
+        }
+        return $user;
     }
+
+
+    /**
+     * Update child information.
+     */
+    public function updateChild($childId, array $data)
+{
+    $child = $this->childRepository->findChildById($childId);
+
+    if (!$child) {
+        throw new \Exception('الطفل غير موجود');
+    }
+    $userId = $child->user_id;
+    $this->validationService->validateUpdateUser($data, $userId);
+    $user = $this->userRepository->findUserById($userId);
+
+    if (!$user) {
+        throw new \Exception('المستخدم غير موجود');
+    }
+
+    $this->userRepository->update($user, $data);
+
+    if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+        $image = $data['image'];
+        $imagePath = $image->store('children_image', 'public');
+        $data['image'] = $imagePath;
+    }
+
+    $this->childRepository->update($child, $data);
+    return new ChildResource($child);
+}
+
+
 
     /**
      * Delete a user and associated child if exists.
@@ -173,6 +215,36 @@ class UserService
 
         return $this->userRepository->delete($id);
     }
+
+    /**
+     * Delete a child and associated child if exists.
+     */
+
+    public function deleteChild($childId)
+    {
+        // ابحث عن الطفل باستخدام معرف الطفل
+        $child = $this->childRepository->findChildById($childId);
+
+        if (!$child) {
+            throw new \Exception('الطفل غير موجود');
+        }
+
+        // ابحث عن المستخدم باستخدام معرف المستخدم المرتبط بالطفل
+        $user = $this->userRepository->findUserById($child->user_id);
+
+        if (!$user) {
+            throw new \Exception('المستخدم غير موجود');
+        }
+
+        // حذف سجل الطفل
+        $this->childRepository->delete($childId);
+
+        // حذف سجل المستخدم
+        $this->userRepository->delete($user->id);
+
+        return true; // أو يمكنك إعادة رسالة نجاح أو نوع مناسب بحسب الحاجة
+    }
+
 
     /**
      * Retrieve user information with child details if available.

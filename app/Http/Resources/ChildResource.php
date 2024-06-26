@@ -22,18 +22,16 @@ class ChildResource extends JsonResource
             'user_name' => $userData['user_name'],
             'account_type' => $userData['account_type'],
             'address' => $userData['address'],
-            'child' => [
-                'id' => $this->id,
-                'user_id' => $this->user_id,
-                'birthdate' => $this->birthdate,
-                'date_of_join' => $this->date_of_join,
-                'date_of_exit' => $this->date_of_exit,
-                'starting_disease' => $this->starting_disease,
-                'healing_date' => $this->healing_date,
-                'disease_type' => $this->disease_type,
-                'note' => $this->note,
-                'image' => $this->image ? asset('storage/' . $this->image) : null,
-            ]
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'birthdate' => $this->birthdate,
+            'date_of_join' => $this->date_of_join,
+            'date_of_exit' => $this->date_of_exit,
+            'starting_disease' => $this->starting_disease,
+            'healing_date' => $this->healing_date,
+            'disease_type' => $this->disease_type,
+            'note' => $this->note,
+            'image' => $this->image ? asset('storage/' . $this->image) : null,
         ];
     }
 }

@@ -22,6 +22,19 @@ class ChildRepository
     }
 
     /**
+     * Finds a child by user ID.
+     */
+    public function findChildById($Id)
+    {
+        try {
+            return ChildProfile::where('id', $Id)->first();
+        } catch (\Exception $e) {
+            throw new \Exception('خطأ في العثور على الطفل: ' . $e->getMessage());
+        }
+    }
+
+
+    /**
      * Creates a new child.
      */
     public function create(array $data)

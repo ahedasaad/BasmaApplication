@@ -50,10 +50,13 @@ Route::middleware('auth:api')->prefix('users')
         Route::post('/addEmployee', 'addEmployee');
         Route::post('/addRepresentative', 'addRepresentative');
         Route::post('/updateUser/{id}', 'updateUser');
+        Route::post('/updateChild/{id}', 'updateChild');
         Route::delete('/deleteUser/{id}', 'deleteUser');
+        Route::delete('/deleteChild/{id}', 'deleteChild');
         Route::get('/showUserInfo/{id}', 'showUserInfo');
         Route::post('/addChild', 'addChild');
         Route::get('/getAllChildren', 'getAllChildren');
+        Route::get('/getAllEmployees', 'getAllEmployees');
         Route::post('/filterChildren', 'filterChildren');
         Route::get('/donor/total', 'countDonors');
         Route::get('/child/total', 'countChilds');
