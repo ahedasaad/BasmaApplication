@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Validation\Rule;
 class ValidationService
 {
     /**
@@ -37,9 +37,9 @@ class ValidationService
 
         $rules = [
             'name' => 'nullable|string|max:255',
-            'email' => 'nullable|email|unique:users',
-            'user_name' => 'nullable|string|unique:users' , // استثناء المستخدم الحالي من التحقق من اسم المستخدم الفريد
-            'mobile_number' => 'nullable|string|min:10|max:15|unique:users',
+            'email' => ['nullable', 'email', Rule::unique('users')->ignore($id)],
+            'user_name' => ['nullable', 'string', Rule::unique('users')->ignore($id)], // استثناء المستخدم الحالي من التحقق من اسم المستخدم الفريد
+            'mobile_number' => ['nullable', 'string', 'min:10', 'max:15', Rule::unique('users')->ignore($id)],
             'address' => 'nullable|string',
 
             'birthdate' => 'nullable|date',

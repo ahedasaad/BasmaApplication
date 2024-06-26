@@ -168,6 +168,19 @@ class UserController extends Controller
     }
 
     /**
+     * Retrieve all children information.
+     */
+    public function getAllEmployees()
+    {
+        try {
+            $children = $this->userService->getAllEmployees();
+            return response()->json($children);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
      * Filter children based on the request parameters (filter_type).
      */
 
