@@ -72,7 +72,9 @@ class PostRepository
 
     public function getUserPosts($user)
     {
-        return $user->posts()->paginate(10);
+        return $user->posts()
+                ->withCount('likes')
+                ->paginate(10);
     }
 
     public function countPost()
