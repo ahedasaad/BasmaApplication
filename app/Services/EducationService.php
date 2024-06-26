@@ -211,9 +211,9 @@ class EducationService
         /**
          * Reject an explanation.
          */
-        public function rejectedExplanation($explanation)
+        public function rejectedExplanation($explanation,array $data)
         {
-            return $this->educationRepository->rejectedExplanation($explanation);
+            return $this->educationRepository->rejectedExplanation($explanation,$data);
         }
 
 
