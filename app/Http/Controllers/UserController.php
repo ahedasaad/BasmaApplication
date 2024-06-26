@@ -43,22 +43,6 @@ class UserController extends Controller
     }
 
     /**
-     * get All Employees
-     */
-
-    public function getAllEmployees()
-    {
-        try {
-            // Get all employees
-            $employees = $this->userService->getAllEmployees();
-            return response()->json($employees);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
-        }
-    }
-
-
-    /**
      * Add a new Representative.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -103,26 +87,8 @@ class UserController extends Controller
     {
         try {
             // Update user
-            $user = $this->userService->updateUser($id, $request->all());
-            return response()->json($user);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
-        }
-    }
-
-    /**
-     * Update an existing User.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updateChild(Request $request, $id)
-    {
-        try {
-            // Update user
-            $Child= $this->userService->updateChild($id, $request->all());
-            return response()->json($Child);
+            $employee = $this->userService->updateUser($id, $request->all());
+            return response()->json($employee);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
@@ -139,22 +105,6 @@ class UserController extends Controller
         try {
             $this->userService->deleteUser($id);
             return response()->json(['message' => 'User deleted successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()]);
-        }
-    }
-
-    /**
-     * Delete a User.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function deleteChild($id)
-    {
-        try {
-            $this->userService->deleteChild($id);
-            return response()->json(['message' => 'Child deleted successfully']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }

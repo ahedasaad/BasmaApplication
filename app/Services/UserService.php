@@ -113,8 +113,8 @@ class UserService
         $childData = array_merge($data, ['user_id' => $user->id]);
         $child = $this->childRepository->create($childData);
         $user->child = $child;
-        $children = ChildProfile::with('user')->get();
-        return new ChildResource($children);
+        $childWithUser = ChildProfile::with('user')->find($child->id);
+        return new ChildResource($childWithUser);
     }
 
     private function cleanFileName($fileName)

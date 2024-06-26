@@ -161,7 +161,7 @@ class BuyingController extends Controller
         try {
             $order = $this->orderService->acceptOrder($orderId);
 
-            return response()->json(['message' => 'Order Received successfully'], 200);
+            return response()->json(['message' => 'Order Accepted successfully'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
