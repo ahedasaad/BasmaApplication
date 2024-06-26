@@ -94,7 +94,7 @@ class EducationController extends Controller
     {
 
 
-        return $this->educationService->orderExplanations(['data'=>$request->all()]);
+        return $this->educationService->orderExplanations($request->all());
     }
 
     /**
