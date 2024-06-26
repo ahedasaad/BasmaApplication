@@ -54,12 +54,15 @@ Route::middleware('auth:api')->prefix('users')
         Route::delete('/deleteUser/{id}', 'deleteUser');
         Route::delete('/deleteChild/{id}', 'deleteChild');
         Route::get('/showUserInfo/{id}', 'showUserInfo');
+        Route::get('/showChildInfo/{id}', 'showChildInfo');
         Route::post('/addChild', 'addChild');
         Route::get('/getAllChildren', 'getAllChildren');
         Route::get('/getAllEmployees', 'getAllEmployees');
         Route::post('/filterChildren', 'filterChildren');
         Route::get('/donor/total', 'countDonors');
         Route::get('/child/total', 'countChilds');
+
+
     });
 
 

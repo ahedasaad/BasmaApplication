@@ -268,6 +268,22 @@ class UserService
     }
 
     /**
+     * Retrieve user information with child details if available.
+     */
+    public function showChildInfo($id)
+    {
+        $child = $this->childRepository->findChildById($id);
+
+        if (!$child) {
+            throw new \Exception('المستخدم غير موجود');
+        }
+
+        $childInfo = $this->childRepository->getChildInfo($child);
+
+        return new ChildResource($child);
+    }
+
+    /**
      * Retrieve all children information.
      */
     public function getAllChildren()

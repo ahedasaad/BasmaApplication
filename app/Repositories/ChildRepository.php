@@ -111,6 +111,14 @@ class ChildRepository
             ->get();
     }
 
+    /**
+     * Returns user information as an array.
+     */
+    public function getChildInfo($user)
+    {
+        return $user->toArray();
+    }
+
 
 }
 

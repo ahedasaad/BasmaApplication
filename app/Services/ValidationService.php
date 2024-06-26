@@ -38,8 +38,8 @@ class ValidationService
         $rules = [
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|email|unique:users',
-            'user_name' => 'nullable|string,' . $id, // استثناء المستخدم الحالي من التحقق من اسم المستخدم الفريد
-            'mobile_number' => 'nullable|string|min:10|max:15|unique:users' . $id,
+            'user_name' => 'nullable|string|unique:users' , // استثناء المستخدم الحالي من التحقق من اسم المستخدم الفريد
+            'mobile_number' => 'nullable|string|min:10|max:15|unique:users',
             'address' => 'nullable|string',
 
             'birthdate' => 'nullable|date',

@@ -94,6 +94,18 @@ class UserController extends Controller
         }
     }
 
+    public function updateChild(Request $request, $id)
+    {
+        try {
+            // Update user
+            $employee = $this->userService->updateChild($id, $request->all());
+            return response()->json($employee);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+
     /**
      * Delete a User.
      *
@@ -120,6 +132,22 @@ class UserController extends Controller
     {
         try {
             $userInfo = $this->userService->showUserInfo($id);
+            return response()->json(['data' => $userInfo]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Show Child Information.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showChildInfo($id)
+    {
+        try {
+            $userInfo = $this->userService->showChildInfo($id);
             return response()->json(['data' => $userInfo]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
