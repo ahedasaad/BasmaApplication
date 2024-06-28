@@ -28,6 +28,7 @@ class ProductController extends Controller
         // $this->middleware(['permission:get_user_products'], ['only' => ['getUserProducts']]);
         // $this->middleware(['permission:get_pending_products'], ['only' => ['getPendingProducts']]);
         // $this->middleware(['permission:get_rejected_products'], ['only' => ['getRejectedProducts']]);
+        // $this->middleware(['permission:count_products'], ['only' => ['countProducts']]);
     }
 
     /**
