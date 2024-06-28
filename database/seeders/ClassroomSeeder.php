@@ -1,7 +1,10 @@
 <?php
 
-use Illuminate\Database\Seeder;
+namespace Database\Seeders;
 use App\Models\Classroom;
+use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\DB;
 
 class ClassroomSeeder extends Seeder
 {
@@ -29,6 +32,7 @@ class ClassroomSeeder extends Seeder
 
         foreach ($classrooms as $classroom) {
             Classroom::create($classroom);
+
         }
     }
 }

@@ -1,7 +1,12 @@
 <?php
 
+namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Subject;
+
+use App\Models\Classroom;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\DB;
 
 class SubjectSeeder extends Seeder
 {
