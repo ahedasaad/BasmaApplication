@@ -42,12 +42,22 @@ class UserService
         return $this->userRepository->create($data);
     }
 
+
+
     /**
      * Git All employee.
      */
     public function getAllEmployees()
     {
         return $this->userRepository->getAllEmployees();
+    }
+
+    /**
+     * Git All Representative.
+     */
+    public function getAllRepresentative()
+    {
+        return $this->userRepository->getAllRepresentative();
     }
 
 

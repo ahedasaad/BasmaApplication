@@ -58,6 +58,7 @@ Route::middleware('auth:api')->prefix('users')
         Route::post('/addChild', 'addChild');
         Route::get('/getAllChildren', 'getAllChildren');
         Route::get('/getAllEmployees', 'getAllEmployees');
+        Route::get('/getAllRepresentative', 'getAllRepresentative');
         Route::post('/filterChildren', 'filterChildren');
         Route::get('/donor/total', 'countDonors');
         Route::get('/child/total', 'countChilds');

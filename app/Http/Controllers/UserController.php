@@ -42,6 +42,7 @@ class UserController extends Controller
         }
     }
 
+
     /**
      * Add a new Representative.
      *
@@ -196,6 +197,20 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()]);
         }
     }
+
+    /**
+     * Retrieve all children information.
+     */
+    public function getAllRepresentative()
+    {
+        try {
+            $children = $this->userService->getAllRepresentative();
+            return response()->json($children);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
 
     /**
      * Filter children based on the request parameters (filter_type).

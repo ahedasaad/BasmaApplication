@@ -31,6 +31,17 @@ class UserRepository
         }
     }
 
+    /**
+     * Git All Representative.
+     */
+    public function getAllRepresentative()
+    {
+        try {
+            return User::where('account_type', 'Representative')->get();
+        } catch (\Exception $e) {
+            throw new \Exception('خطأ في جلب المناديب ' . $e->getMessage());
+        }
+    }
 
     /**
      * Finds a user by ID.
