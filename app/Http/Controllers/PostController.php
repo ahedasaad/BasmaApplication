@@ -84,8 +84,8 @@ class PostController extends Controller
                 $image = $request->file('image');
                 $imageName = $image->getClientOriginalName();
                 $imagePath = $image->storeAs('posts', $imageName, 'public');
-                $postData['image'] = $imagePath;
-//                $postData['image'] = 'app/public/' . $imagePath;
+                //$postData['image'] = $imagePath;
+                $postData['image'] = 'app/public/' . $imagePath;
             }
 
 
@@ -244,7 +244,7 @@ class PostController extends Controller
 
     public function countPosts()
     {
-        try{
+        try {
             $countPost = $this->postService->getPostCount();
             return response()->json(['total_records = ' => $countPost]);
         } catch (\Exception $e) {

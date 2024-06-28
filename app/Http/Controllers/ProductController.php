@@ -99,7 +99,8 @@ class ProductController extends Controller
                 $imageName = $image->getClientOriginalName();
                 $imagePath = $image->storeAs('products', $imageName, 'public');
 
-                $productData['image'] = $imagePath; 
+                //$productData['image'] = $imagePath;
+                $productData['image'] = 'app/public/' . $imagePath;
             }
 
             $product = $this->productService->createProduct($productData);
