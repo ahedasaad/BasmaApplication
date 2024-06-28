@@ -123,6 +123,23 @@ class UserController extends Controller
     }
 
     /**
+     * Delete a User.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteChild($id)
+    {
+        try {
+            $this->userService->deleteChild($id);
+            return response()->json(['message' => 'User deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+
+    /**
      * Show User Information.
      *
      * @param  int  $id

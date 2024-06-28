@@ -83,8 +83,8 @@ class PostController extends Controller
                 $image = $request->file('image');
                 $imageName = $image->getClientOriginalName();
                 $imagePath = $image->storeAs('posts', $imageName, 'public');
-
                 $postData['image'] = $imagePath;
+//                $postData['image'] = 'app/public/' . $imagePath;
             }
 
 

@@ -103,7 +103,8 @@ class UserService
             $imagePath = $image->storeAs('children_image', $imageName, 'public');
 
             // Add the image path to the data array
-            $data['image'] = $imagePath;
+            $data['image'] =  $imagePath;
+//            $data['image'] = 'app/public/' . $imagePath;
         }
 
         $data['account_type'] = $data['account_type'] ?? 'child';
@@ -182,14 +183,16 @@ class UserService
 
     $this->userRepository->update($user, $data);
 
-    if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
-        $image = $data['image'];
-        $imagePath = $image->store('children_image', 'public');
-        $data['image'] = $imagePath;
-    }
+//    if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+//        $image = $data['image'];
+//        $imagePath = $image->store('children_image', 'public');
+//        $data['image'] = $imagePath;
+//    }
 
     $this->childRepository->update($child, $data);
-    return new ChildResource($child);
+    return (new ChildResource($child))->toArrayWithoutImage($child);
+//    return new ChildResource($child);
+// return response()->json((new ChildResource($child))->toArrayWithoutImage(request()));
 }
 
 

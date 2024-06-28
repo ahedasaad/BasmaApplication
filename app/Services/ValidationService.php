@@ -67,17 +67,17 @@ class ValidationService
     {
         $rules = [
 
-            'name' => 'required|string|max:255',
+            'name' => 'required||max:255',
             'email' => 'nullable|email|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'user_name' => 'required|string|unique:users',
+            'user_name' => 'required|string|unique:users', // استثناء المستخدم الحالي من التحقق من اسم المستخدم الفريد
             'mobile_number' => 'nullable|string|min:10|max:15|unique:users',
-            'address' => 'nullable|string',
+            'password' => 'required|string|min:8|confirmed',
 
+
+            'address' => 'nullable|string',
             'birthdate' => 'required|date',
             'date_of_join' => 'required|date',
-            'starting_disease' => 'required|date',
-
+            'starting_disease' => 'nullable|date',
             'disease_type' => 'required|string',
             'note' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
