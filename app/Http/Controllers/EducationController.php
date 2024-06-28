@@ -92,8 +92,6 @@ class EducationController extends Controller
      */
     public function orderExplanations(Request $request)
     {
-
-
         return $this->educationService->orderExplanations($request->all());
     }
 
@@ -322,10 +320,10 @@ class EducationController extends Controller
     /**
      * Reject an explanation.
      */
-    public function rejectedExplanation($explanation)
+    public function rejectedExplanation($explanation,Request $request)
     {
         try {
-            $explanation = $this->educationService->rejectedExplanation($explanation);
+            $explanation = $this->educationService->rejectedExplanation($explanation,$request->all());
 
             return response()->json($explanation);
         } catch (\Exception $e) {

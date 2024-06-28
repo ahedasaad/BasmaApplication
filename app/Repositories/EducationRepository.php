@@ -256,9 +256,12 @@ class EducationRepository
     /**
      * Reject an explanation by changing its status to 'rejected'.
      */
-    public function rejectedExplanation($explanation)
+    public function rejectedExplanation($explanation,array $data)
     {
         $explanation = Explanation::findOrFail($explanation);
+        if (isset($data['note'])) {
+            $explanation->note = $data['note'];
+        }
         $explanation->state = 'rejected';
         $explanation->save();
         return $explanation;

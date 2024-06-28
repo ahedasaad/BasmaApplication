@@ -42,6 +42,7 @@ class UserController extends Controller
         }
     }
 
+
     /**
      * Add a new Representative.
      *
@@ -94,6 +95,18 @@ class UserController extends Controller
         }
     }
 
+    public function updateChild(Request $request, $id)
+    {
+        try {
+            // Update user
+            $employee = $this->userService->updateChild($id, $request->all());
+            return response()->json($employee);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+
     /**
      * Delete a User.
      *
@@ -109,6 +122,23 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()]);
         }
     }
+
+    /**
+     * Delete a User.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteChild($id)
+    {
+        try {
+            $this->userService->deleteChild($id);
+            return response()->json(['message' => 'User deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
 
     /**
      * Show User Information.
@@ -127,6 +157,22 @@ class UserController extends Controller
     }
 
     /**
+     * Show Child Information.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showChildInfo($id)
+    {
+        try {
+            $userInfo = $this->userService->showChildInfo($id);
+            return response()->json(['data' => $userInfo]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
      * Retrieve all children information.
      */
     public function getAllChildren()
@@ -138,6 +184,33 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()]);
         }
     }
+
+    /**
+     * Retrieve all children information.
+     */
+    public function getAllEmployees()
+    {
+        try {
+            $children = $this->userService->getAllEmployees();
+            return response()->json($children);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Retrieve all children information.
+     */
+    public function getAllRepresentative()
+    {
+        try {
+            $children = $this->userService->getAllRepresentative();
+            return response()->json($children);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
+    }
+
 
     /**
      * Filter children based on the request parameters (filter_type).
