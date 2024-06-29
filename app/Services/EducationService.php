@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Http\Resources\ExplanationResource;
+use App\Http\Resources\OrderExplanationResource;
 use App\Models\Explanation;
 use App\Models\OrderExplanation;
 use App\Models\Title;
@@ -61,7 +63,9 @@ class EducationService
         public function orderExplanations(array $data)
         {
             $this->validationService->validateorderExplanations($data);
-            return $this->educationRepository->orderExplanations($data);
+            $orderExplanation = $this->educationRepository->orderExplanations($data);
+            return new OrderExplanationResource($orderExplanation);
+
         }
 
         /**
@@ -81,7 +85,7 @@ class EducationService
             $explanation =$this->educationRepository->createExplanation($orderId,$orderExplanation);
             $orderExplanation=$this->educationRepository->updateApprovalsCount($orderExplanation);
 
-            return $explanation;
+            return new OrderExplanationResource($explanation);
             } catch (\Exception $e) {
                 return response()->json(['error' => $e->getMessage()]);
             }
@@ -92,7 +96,8 @@ class EducationService
          */
         public function getAllOrderExplanations()
         {
-            return $this->educationRepository->getAllOrderExplanations();
+            $OrderExplanations= $this->educationRepository->getAllOrderExplanations();
+            return OrderExplanationResource::collection($OrderExplanations);
         }
 
         /**
@@ -101,7 +106,8 @@ class EducationService
         public function getChildOrderExplanations()
         {
             $loggedInChildId = Auth::id();
-            return $this->educationRepository->getChildOrderExplanations($loggedInChildId);
+            $OrderExplanations= $this->educationRepository->getChildOrderExplanations($loggedInChildId);
+            return OrderExplanationResource::collection($OrderExplanations);
         }
 
         /**
@@ -109,7 +115,10 @@ class EducationService
          */
         public function OrderExplanationDetails($id)
         {
-            return $this->educationRepository->OrderExplanationDetails($id);
+            $orderExplanation= $this->educationRepository->OrderExplanationDetails($id);
+            return new OrderExplanationResource($orderExplanation);
+
+
         }
 
     /**
@@ -117,25 +126,28 @@ class EducationService
      */
     public function ExplanationDetails($id)
     {
-        return $this->educationRepository->ExplanationDetails($id);
+        $Explanation= $this->educationRepository->ExplanationDetails($id);
+        return new ExplanationResource($Explanation);
     }
 
         /**
          * Retrieve pending explanations for the current user.d
          */
-        public function getUserPendingExplanations()
-        {
-            $userId = Auth::id();
-            return $this->educationRepository->getUserPendingExplanations($userId);
-        }
+    public function getUserPendingExplanations()
+    {
+        $userId = Auth::id();
+        $pendingExplanations = $this->educationRepository->getUserPendingExplanations($userId);
+
+        return ExplanationResource::collection($pendingExplanations);
+    }
 
         /**
          * Retrieve all pending explanations.
          */
         public function getAllPendingExplanations()
         {
-
-            return $this->educationRepository->getAllPendingExplanations();
+            $pendingExplanations = $this->educationRepository->getAllPendingExplanations();
+            return ExplanationResource::collection($pendingExplanations);
         }
 
         /**
@@ -144,7 +156,8 @@ class EducationService
         public function getUserUploadedExplanations()
         {
             $userId = Auth::id();
-            return $this->educationRepository->getUserUploadedExplanations($userId);
+            $uploadedExplanations = $this->educationRepository->getUserUploadedExplanations($userId);
+            return ExplanationResource::collection($uploadedExplanations);
         }
 
         /**
@@ -153,7 +166,8 @@ class EducationService
         public function getAllUploadedExplanations()
         {
 
-            return $this->educationRepository->getAllUploadedExplanations();
+            $uploadedExplanations = $this->educationRepository->getAllUploadedExplanations();
+            return ExplanationResource::collection($uploadedExplanations);
         }
 
         /**
@@ -162,7 +176,8 @@ class EducationService
         public function getUserRejectedExplanations()
         {
             $userId = Auth::id();
-            return $this->educationRepository->getUserRejectedExplanations($userId);
+            $rejectedExplanations= $this->educationRepository->getUserRejectedExplanations($userId);
+            return ExplanationResource::collection($rejectedExplanations);
         }
 
         /**
@@ -171,7 +186,8 @@ class EducationService
         public function getAllRejectedExplanations()
         {
 
-            return $this->educationRepository->getAllRejectedExplanations();
+            $rejectedExplanations= $this->educationRepository->getAllRejectedExplanations();
+            return ExplanationResource::collection($rejectedExplanations);
         }
 
         /**
@@ -180,7 +196,8 @@ class EducationService
         public function getUserApprovedExplanations()
         {
             $userId = Auth::id();
-            return $this->educationRepository->getUserApprovedExplanations($userId);
+            $approvedExplanations =$this->educationRepository->getUserApprovedExplanations($userId);
+            return ExplanationResource::collection($approvedExplanations);
         }
 
         /**
@@ -189,7 +206,8 @@ class EducationService
         public function getAllApprovedExplanations()
         {
 
-            return $this->educationRepository->getAllApprovedExplanations();
+            $approvedExplanations =$this->educationRepository->getAllApprovedExplanations();
+            return ExplanationResource::collection($approvedExplanations);
         }
 
         /**
@@ -197,7 +215,8 @@ class EducationService
          */
         public function getExplanationsByTitle($titleId)
         {
-            return $this->educationRepository->getExplanationsByTitle($titleId);
+            $explanations= $this->educationRepository->getExplanationsByTitle($titleId);
+            return ExplanationResource::collection($explanations);
         }
 
         /**
@@ -205,15 +224,17 @@ class EducationService
          */
         public function approveExplanation($explanation)
         {
-            return $this->educationRepository->approveExplanation($explanation);
-        }
+            $approvedExplanation = $this->educationRepository->approveExplanation($explanation);
 
+            return new ExplanationResource($approvedExplanation);
+        }
         /**
          * Reject an explanation.
          */
         public function rejectedExplanation($explanation,array $data)
         {
-            return $this->educationRepository->rejectedExplanation($explanation,$data);
+            $rejectedExplanation= $this->educationRepository->rejectedExplanation($explanation,$data);
+            return new ExplanationResource($rejectedExplanation);
         }
 
 
