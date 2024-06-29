@@ -66,8 +66,8 @@ class AuthController extends Controller
                 // Code is valid, complete the registration process
                 $user = $registration->user;
                 $user->update(['is_active' => 1]);
-
-                return response()->json(['message' => 'Registration code verified successfully'], 200);
+                $token = $user->createToken('token-name')->plainTextToken;
+                return response()->json(['token' => $token], 200);
             } else {
                 return response()->json(['error' => 'Invalid or expired registration code'], 400);
             }

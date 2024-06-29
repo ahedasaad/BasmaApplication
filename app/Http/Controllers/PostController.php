@@ -28,6 +28,7 @@ class PostController extends Controller
         // $this->middleware(['permission:get_user_posts'], ['only' => ['getUserPosts']]);
         // $this->middleware(['permission:add_like'], ['only' => ['addLike']]);
         // $this->middleware(['permission:remove_like'], ['only' => ['removeLike']]);
+        // $this->middleware(['permission:count_posts'], ['only' => ['countPosts']]);
     }
 
     /*
@@ -83,8 +84,8 @@ class PostController extends Controller
                 $image = $request->file('image');
                 $imageName = $image->getClientOriginalName();
                 $imagePath = $image->storeAs('posts', $imageName, 'public');
-                $postData['image'] = $imagePath;
-//                $postData['image'] = 'app/public/' . $imagePath;
+                //$postData['image'] = $imagePath;
+                $postData['image'] = 'app/public/' . $imagePath;
             }
 
 
@@ -119,23 +120,13 @@ class PostController extends Controller
         try {
             $request->validate([
                 'post_category' => 'in:story,activity,other',
-                // 'state' => 'in:pending,approved,rejected',
-                // 'text' => 'nullable|string|max:5000',
-                // 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             $post = $this->postService->findPostById($id);
 
             $postData = [
                 'post_category' => $request->input('post_category'),
-                // 'state' => $request->input('state'),
-                // 'text' => $request->input('text'),
             ];
-
-            // if ($request->hasFile('image')) {
-            //     $imagePath = $request->file('image')->store('photos', 'public');
-            //     $postData['image'] = $imagePath;
-            // }
 
             $updatedPost = $this->postService->updatePost($post, $postData);
 
@@ -253,7 +244,7 @@ class PostController extends Controller
 
     public function countPosts()
     {
-        try{
+        try {
             $countPost = $this->postService->getPostCount();
             return response()->json(['total_records = ' => $countPost]);
         } catch (\Exception $e) {

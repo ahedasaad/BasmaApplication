@@ -11,6 +11,7 @@ class PostRepository
     {
         return Post::where('state', 'approved')
             ->withCount('likes')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
     }
 
@@ -18,6 +19,7 @@ class PostRepository
     {
         return Post::where('state', 'pending')
             ->withCount('likes')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
     }
 
@@ -74,6 +76,7 @@ class PostRepository
     {
         return $user->posts()
                 ->withCount('likes')
+                ->orderBy('created_at', 'desc')
                 ->paginate(10);
     }
 
