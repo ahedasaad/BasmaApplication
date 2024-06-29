@@ -14,5 +14,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('basma');
+});
+
+Route::get('/donate', function () {
+    return view('donate');
+});
+
+Route::get('/contact', function () {
+    return view('contact');
 });
