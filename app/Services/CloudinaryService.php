@@ -42,9 +42,9 @@ class CloudinaryService
     }
 
 
-    public function saveExplanationUrl($explanatId, $url)
+    public function saveExplanationUrl($explanatId, $url,$title)
     {
-        return $this->educationRepository->saveExplanationUrl($explanatId, $url);
+        return $this->educationRepository->saveExplanationUrl($explanatId, $url,$title);
     }
 
     public function uploadToCloudinary1(Request $request)

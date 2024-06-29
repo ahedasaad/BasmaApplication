@@ -267,11 +267,12 @@ class EducationRepository
         return $explanation;
     }
 
-    public function saveExplanationUrl($explanationId, $url)
+    public function saveExplanationUrl($explanationId, $url,$title)
     {
         $explanation = Explanation::findOrFail($explanationId);
         $explanation->state = 'uploaded';
         $explanation->video = $url;
+        $explanation->title = $title;
         $explanation->save();
         return $explanation;
     }
