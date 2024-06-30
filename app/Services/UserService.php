@@ -23,7 +23,7 @@ class UserService
      * @param ValidationService $validationService
      */
 
-    public function __construct(UserRepository $userRepository, ChildRepository $childRepository , ValidationService $validationService)
+    public function __construct(UserRepository $userRepository, ChildRepository $childRepository, ValidationService $validationService)
     {
         $this->userRepository = $userRepository;
         $this->childRepository = $childRepository;
@@ -39,7 +39,10 @@ class UserService
 
         $data['account_type'] = isset($data['account_type']) ? $data['account_type'] : 'employee';
         $data['password'] = Hash::make($data['password']);
-        return $this->userRepository->create($data);
+        $user = $this->userRepository->create($data);
+        $user->assignRole('employee');
+
+        return $user;
     }
 
 
@@ -70,13 +73,15 @@ class UserService
 
         $data['account_type'] = isset($data['account_type']) ? $data['account_type'] : 'representative';
         $data['password'] = Hash::make($data['password']);
-        return $this->userRepository->create($data);
+        $user = $this->userRepository->create($data);
+        $user->assignRole('representative');
+        return $user;
     }
 
     /**
      * Create a new child user.
      */
-//    public function createChild(array $data)
+    //    public function createChild(array $data)
 //    {
 //        $this->validationService->validateAddChild($data);
 //
@@ -113,14 +118,15 @@ class UserService
             $imagePath = $image->storeAs('children_image', $imageName, 'public');
 
             // Add the image path to the data array
-            $data['image'] =  $imagePath;
-//            $data['image'] = 'app/public/' . $imagePath;
+            //$data['image'] = $imagePath;
+            $data['image'] = 'app/public/' . $imagePath;
         }
 
         $data['account_type'] = $data['account_type'] ?? 'child';
         $data['password'] = Hash::make($data['password']);
 
         $user = $this->userRepository->create($data);
+        $user->assignRole('child');
         $childData = array_merge($data, ['user_id' => $user->id]);
         $child = $this->childRepository->create($childData);
         $user->child = $child;
@@ -177,33 +183,33 @@ class UserService
      * Update child information.
      */
     public function updateChild($childId, array $data)
-{
-    $child = $this->childRepository->findChildById($childId);
+    {
+        $child = $this->childRepository->findChildById($childId);
 
-    if (!$child) {
-        throw new \Exception('الطفل غير موجود');
-    }
-    $userId = $child->user_id;
-    $this->validationService->validateUpdateUser($data, $userId);
-    $user = $this->userRepository->findUserById($userId);
+        if (!$child) {
+            throw new \Exception('الطفل غير موجود');
+        }
+        $userId = $child->user_id;
+        $this->validationService->validateUpdateUser($data, $userId);
+        $user = $this->userRepository->findUserById($userId);
 
-    if (!$user) {
-        throw new \Exception('المستخدم غير موجود');
-    }
+        if (!$user) {
+            throw new \Exception('المستخدم غير موجود');
+        }
 
-    $this->userRepository->update($user, $data);
+        $this->userRepository->update($user, $data);
 
-//    if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+        //    if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
 //        $image = $data['image'];
 //        $imagePath = $image->store('children_image', 'public');
 //        $data['image'] = $imagePath;
 //    }
 
-    $this->childRepository->update($child, $data);
-    return (new ChildResource($child))->toArrayWithoutImage($child);
-//    return new ChildResource($child);
+        $this->childRepository->update($child, $data);
+        return (new ChildResource($child))->toArrayWithoutImage($child);
+        //    return new ChildResource($child);
 // return response()->json((new ChildResource($child))->toArrayWithoutImage(request()));
-}
+    }
 
 
 
