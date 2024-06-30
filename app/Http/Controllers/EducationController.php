@@ -354,8 +354,9 @@ class EducationController extends Controller
     public function saveExplanationUrl(Request $request, $explanatId)
     {
         try {// استخراج الرابط من الريكوس
-        $url = $request->input('url');
-            $explanatId=$this->cloudinaryService->saveExplanationUrl($explanatId, $url);
+            $url = $request->input('url');
+            $title = $request->input('title');
+            $explanatId=$this->cloudinaryService->saveExplanationUrl($explanatId, $url,$title);
         return response()->json(['message' => 'Explanation URL saved successfully','explanatId'=>$explanatId]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

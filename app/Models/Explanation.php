@@ -23,9 +23,9 @@ class Explanation extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function title()
+    public function relatedTitle()
     {
-        return $this->belongsTo(Title::class);
+        return $this->belongsTo(Title::class,'title_id');
     }
 
     public function order_explanation()
