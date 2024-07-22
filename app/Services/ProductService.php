@@ -87,4 +87,9 @@ class ProductService
     {
         return $this->productRepository->countProduct();
     }
+
+    public function getPendingProductCount()
+    {
+        return $this->productRepository->countPendingProduct();
+    }
 }

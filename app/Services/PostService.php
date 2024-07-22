@@ -68,4 +68,9 @@ class PostService
     {
         return $this->postRepository->countPost();
     }
+
+    public function getPostPendingCount()
+    {
+        return $this->postRepository->countPostPending();
+    }
 }

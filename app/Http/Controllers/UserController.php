@@ -23,6 +23,22 @@ class UserController extends Controller
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
+
+        // $this->middleware(['permission:add_employee'], ['only' => ['addEmployee']]);
+        // $this->middleware(['permission:add_representative'], ['only' => ['addRepresentative']]);
+        // $this->middleware(['permission:add_child'], ['only' => ['addChild']]);
+        // $this->middleware(['permission:update_user'], ['only' => ['updateUser']]);
+        // $this->middleware(['permission:update_child'], ['only' => ['updateChild']]);
+        // $this->middleware(['permission:delete_user'], ['only' => ['deleteUser']]);
+        // $this->middleware(['permission:delete_child'], ['only' => ['deleteChild']]);
+        // $this->middleware(['permission:show_user_info'], ['only' => ['showUserInfo']]);
+        // $this->middleware(['permission:show_child_info'], ['only' => ['showChildInfo']]);
+        // $this->middleware(['permission:get_all_children'], ['only' => ['getAllChildren']]);
+        // $this->middleware(['permission:get_all_employees'], ['only' => ['getAllEmployees']]);
+        // $this->middleware(['permission:get_all_representative'], ['only' => ['getAllRepresentative']]);
+        // $this->middleware(['permission:filter_children'], ['only' => ['filterChildren']]);
+        // $this->middleware(['permission:count_donors'], ['only' => ['countDonors']]);
+        // $this->middleware(['permission:count_childs'], ['only' => ['countChilds']]);
     }
 
     /**

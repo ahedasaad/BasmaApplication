@@ -17,18 +17,18 @@ class PostController extends Controller
         $this->postService = $postService;
         $this->likeService = $likeService;
 
-        // $this->middleware(['permission:get_all_posts'], ['only' => ['index', 'show']]);
-        // $this->middleware(['permission:get_all_pending_posts'], ['only' => ['getAll', 'show']]);
-        // $this->middleware(['permission:create_post'], ['only' => ['store']]);
-        // $this->middleware(['permission:update_post'], ['only' => ['update']]);
-        // $this->middleware(['permission:delete_post'], ['only' => ['destroy']]);
-        // $this->middleware(['permission:filter_post'], ['only' => ['filter']]);
-        // $this->middleware(['permission:accept_post'], ['only' => ['acceptPost']]);
-        // $this->middleware(['permission:unaccept_post'], ['only' => ['unacceptPost']]);
-        // $this->middleware(['permission:get_user_posts'], ['only' => ['getUserPosts']]);
-        // $this->middleware(['permission:add_like'], ['only' => ['addLike']]);
-        // $this->middleware(['permission:remove_like'], ['only' => ['removeLike']]);
-        // $this->middleware(['permission:count_posts'], ['only' => ['countPosts']]);
+        $this->middleware(['permission:get_all_posts'], ['only' => ['index', 'show']]);
+        $this->middleware(['permission:get_all_pending_posts'], ['only' => ['getAll', 'show']]);
+        $this->middleware(['permission:create_post'], ['only' => ['store']]);
+        $this->middleware(['permission:update_post'], ['only' => ['update']]);
+        $this->middleware(['permission:delete_post'], ['only' => ['destroy']]);
+        $this->middleware(['permission:filter_post'], ['only' => ['filter']]);
+        $this->middleware(['permission:accept_post'], ['only' => ['acceptPost']]);
+        $this->middleware(['permission:unaccept_post'], ['only' => ['unacceptPost']]);
+        $this->middleware(['permission:get_user_posts'], ['only' => ['getUserPosts']]);
+        $this->middleware(['permission:add_like'], ['only' => ['addLike']]);
+        $this->middleware(['permission:remove_like'], ['only' => ['removeLike']]);
+        $this->middleware(['permission:count_posts'], ['only' => ['countPosts']]);
     }
 
     /*
@@ -246,6 +246,16 @@ class PostController extends Controller
     {
         try {
             $countPost = $this->postService->getPostCount();
+            return response()->json(['total_records = ' => $countPost]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function countPendingPosts()
+    {
+        try {
+            $countPost = $this->postService->getPostPendingCount();
             return response()->json(['total_records = ' => $countPost]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

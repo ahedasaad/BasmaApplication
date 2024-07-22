@@ -28,7 +28,7 @@ class ProductController extends Controller
         // $this->middleware(['permission:get_user_products'], ['only' => ['getUserProducts']]);
         // $this->middleware(['permission:get_pending_products'], ['only' => ['getPendingProducts']]);
         // $this->middleware(['permission:get_rejected_products'], ['only' => ['getRejectedProducts']]);
-        // $this->middleware(['permission:count_products'], ['only' => ['countProducts']]);
+        //$this->middleware(['permission:count_products'], ['only' => ['countProducts']]);
     }
 
     /**
@@ -99,8 +99,8 @@ class ProductController extends Controller
                 $imageName = $image->getClientOriginalName();
                 $imagePath = $image->storeAs('products', $imageName, 'public');
 
-                //$productData['image'] = $imagePath;
-                $productData['image'] = 'app/public/' . $imagePath;
+                $productData['image'] = $imagePath;
+                //$productData['image'] = 'app/public/' . $imagePath;
             }
 
             $product = $this->productService->createProduct($productData);
@@ -253,6 +253,16 @@ class ProductController extends Controller
     {
         try{
             $countProduct = $this->productService->getProductCount();
+            return response()->json(['total_records = ' => $countProduct]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function PendingProducts()
+    {
+        try{
+            $countProduct = $this->productService->getPendingProductCount();
             return response()->json(['total_records = ' => $countProduct]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

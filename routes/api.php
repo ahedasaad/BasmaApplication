@@ -88,6 +88,7 @@ Route::middleware('auth:api')->prefix('posts')
         Route::post('/like/{postId}', 'addLike');
         Route::post('/remove/like/{postId}', 'removeLike');
         Route::get('/post/total', 'countPosts');
+        //Route::get('/post/pending', 'countPendingPosts');
     });
 
 
@@ -118,11 +119,11 @@ Route::middleware('auth:api')->prefix('education')
         Route::get('/generateSignature', 'generateSignature');
         Route::POST('/saveExplanationUrl/{id}', 'saveExplanationUrl');
         ////JUST FOR TEASTING
-        Route::POST('/uploadToCloudinary', 'uploadToCloudinary');
-        Route::POST('/uploadToCloudinary1', 'uploadToCloudinary1');
-        Route::POST('/uploadVideoToCloudinary', 'uploadVideoToCloudinary');
-        Route::GET('/fetchVideoFromCloudinary', 'fetchVideoFromCloudinary');
-        Route::GET('/fetchVideoFromCloudinary1', 'fetchVideoFromCloudinary1');
+        // Route::POST('/uploadToCloudinary', 'uploadToCloudinary');
+        // Route::POST('/uploadToCloudinary1', 'uploadToCloudinary1');
+        // Route::POST('/uploadVideoToCloudinary', 'uploadVideoToCloudinary');
+        // Route::GET('/fetchVideoFromCloudinary', 'fetchVideoFromCloudinary');
+        // Route::GET('/fetchVideoFromCloudinary1', 'fetchVideoFromCloudinary1');
 
 
     });
@@ -160,7 +161,10 @@ Route::middleware('auth:api')->prefix('products')
         Route::get('/product/rejected', 'getRejectedProducts');
         Route::get('/user/get_user_products', 'getUserProducts');
         Route::get('/product/total', 'countProducts');
+
     });
+
+Route::get('/products/product/get_pending', [ProductController::class, 'PendingProducts']);
 
 /*
 |--------------------------------------------------------------------------
@@ -176,17 +180,19 @@ Route::middleware('auth:api')->prefix('baskets')
         Route::delete('/remove/{productId}', 'removeFromBasket');
     });
 
-Route::middleware('auth:api')->prefix('orders')
+Route::middleware('auth:api')->prefix('buying_orders')
     ->controller(BuyingController::class)
     ->group(function () {
-        Route::post('/', 'placeOrder');
+        Route::post('/order', 'placeOrder');
         Route::get('/{orderId}', 'showOrder');
-        Route::get('/pending', 'getPendingOrders');
-        Route::get('/received', 'getReceivedOrders');
-        Route::get('/unreceived', 'getUnreceivedOrders');
-        Route::get('/done', 'getDoneOrders');
+        Route::get('/user/get_user_orders', 'getUserOrders');
+        Route::get('/order/pending', 'getPendingOrders');
+        Route::get('/order/getacceptedOrders', 'getacceptedOrders');
+        Route::get('/order/getReceivedOrders', 'getReceivedOrders');
+        Route::get('/order/getUnreceivedOrders', 'getUnreceivedOrders');
+        Route::get('/order/getDoneOrders', 'getDoneOrders');
+        Route::post('/order/accept/{orderId}', 'acceptOrder');
         Route::post('/order/received/{orderId}', 'updateOrderState');
         Route::post('/order/done/{orderId}', 'updateOrderStateToDone');
         Route::post('/order/unreceived/{orderId}', 'updateOrderStateToUnreceived');
-        Route::get('/user/get_user_orders', 'getUserOrders');
     });
