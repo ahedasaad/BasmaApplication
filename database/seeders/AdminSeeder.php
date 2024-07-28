@@ -24,5 +24,7 @@ class AdminSeeder extends Seeder
             'account_type' => 'admin',
             'is_active' => true,
         ]);
+
+        $adminUser->assignRole('admin');
     }
 }

@@ -34,6 +34,8 @@ class AuthController extends Controller
                 'account_type' => 'donor',
             ]);
 
+            //$user->assignRole('donor');
+
             $code = random_int(100000, 999999);
 
             $registration = Registration::create([

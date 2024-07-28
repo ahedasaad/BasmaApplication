@@ -18,6 +18,21 @@ class BuyingController extends Controller
     {
         $this->basketService = $basketService;
         $this->orderService = $orderService;
+
+        // $this->middleware(['permission:get_my_basket'], ['only' => ['showUserBasket']]);
+        // $this->middleware(['permission:add_to_basket'], ['only' => ['addToBasket']]);
+        // $this->middleware(['permission:remove_from_basket'], ['only' => ['removeFromBasket']]);
+        // $this->middleware(['permission:make_order'], ['only' => ['placeOrder']]);
+        // $this->middleware(['permission:show_order'], ['only' => ['showOrder']]);
+        // $this->middleware(['permission:get_pending_orders'], ['only' => ['getPendingOrders']]);
+        // $this->middleware(['permission:get_received_orders'], ['only' => ['getReceivedOrders']]);
+        // $this->middleware(['permission:get_unreceived_orders'], ['only' => ['getUnreceivedOrders']]);
+        // $this->middleware(['permission:get_done_orders'], ['only' => ['getDoneOrders']]);
+        // $this->middleware(['permission:accept_order'], ['only' => ['acceptOrder']]);
+        // $this->middleware(['permission:update_order_state'], ['only' => ['updateOrderState']]);
+        // $this->middleware(['permission:update_order_state_done'], ['only' => ['updateOrderStateToDone']]);
+        // $this->middleware(['permission:update_order_state_unreceived'], ['only' => ['updateOrderStateToUnreceived']]);
+        // $this->middleware(['permission:get_user_orders'], ['only' => ['getUserOrders']]);
     }
 
     public function showUserBasket(Request $request)
@@ -33,7 +48,7 @@ class BuyingController extends Controller
 
             return response()->json([
                 'basket' => $basket,
-                'products' => ProductResource::collection($basket->products),
+                //'products' => ProductResource::collection($basket->products),
             ]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -123,6 +138,17 @@ class BuyingController extends Controller
         }
     }
 
+    public function getacceptedOrders()
+    {
+        try {
+            $acceptedOrders = $this->orderService->getAcceptedOrders();
+
+            return BuyingResource::collection($acceptedOrders);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function getReceivedOrders()
     {
         try {
@@ -159,7 +185,11 @@ class BuyingController extends Controller
     public function acceptOrder($orderId)
     {
         try {
-            $order = $this->orderService->acceptOrder($orderId);
+            $user = User::find(auth()->id());
+            if (!$user) {
+                return response()->json(['message' => 'User not found'], 404);
+            }
+            $order = $this->orderService->acceptOrder($orderId, $user->id);
 
             return response()->json(['message' => 'Order Accepted successfully'], 200);
         } catch (\Exception $e) {

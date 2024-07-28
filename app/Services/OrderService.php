@@ -33,6 +33,11 @@ class OrderService
         return $this->orderRepository->getPendingOrders();
     }
 
+    public function getAcceptedOrders()
+    {
+        return $this->orderRepository->getAcceptedOrders();
+    }
+
     public function getReceivedOrders()
     {
         return $this->orderRepository->getReceivedOrders();
@@ -48,9 +53,9 @@ class OrderService
         return $this->orderRepository->getDoneOrders();
     }
 
-    public function acceptOrder($orderId)
+    public function acceptOrder($orderId,$userId)
     {
-        return $this->orderRepository->updateOrderStateToAccept($orderId);
+        return $this->orderRepository->updateOrderStateToAccept($orderId,$userId);
     }
 
     public function updateOrderState($orderId)

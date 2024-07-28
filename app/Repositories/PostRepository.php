@@ -85,4 +85,10 @@ class PostRepository
         $postCount = Post::where('state', 'approved')->count();
         return $postCount;
     }
+
+    public function countPostPending()
+    {
+        $postCount = Post::where('state', 'pending')->count();
+        return $postCount;
+    }
 }
