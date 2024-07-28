@@ -23,7 +23,7 @@ class OrderRepository
 
     public function getPendingOrders()
     {
-        return BuyProduct::where('state', 'pending')->get();
+        return BuyProduct::where('state','pending')->get();
     }
 
     public function getReceivedOrders()
@@ -46,7 +46,7 @@ class OrderRepository
         $order = BuyProduct::findOrFail($orderId);
         $order->state = 'accept';
         $order->representative_id = auth()->id();
-        
+
         $order->save();
 
         return $order;
