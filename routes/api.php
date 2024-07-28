@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -181,12 +182,31 @@ Route::middleware('auth:api')->prefix('orders')
     ->group(function () {
         Route::post('/', 'placeOrder');
         Route::get('/{orderId}', 'showOrder');
-        Route::get('/pending', 'getPendingOrders');
-        Route::get('/received', 'getReceivedOrders');
-        Route::get('/unreceived', 'getUnreceivedOrders');
+        Route::get('/order/getPendingOrders', 'getPendingOrders');
+        Route::get('/order/getReceivedOrders', 'getReceivedOrders');
+        Route::get('/order/getUnreceivedOrders', 'getUnreceivedOrders');
         Route::get('/done', 'getDoneOrders');
         Route::post('/order/received/{orderId}', 'updateOrderState');
         Route::post('/order/done/{orderId}', 'updateOrderStateToDone');
         Route::post('/order/unreceived/{orderId}', 'updateOrderStateToUnreceived');
         Route::get('/user/get_user_orders', 'getUserOrders');
     });
+
+
+/*
+|--------------------------------------------------------------------------
+|  Chat
+|--------------------------------------------------------------------------
+*/
+
+
+Route::middleware('auth:api')->prefix('chat')
+    ->controller(MessageController::class)
+    ->group(function () {
+        Route::post('/send-message/{ID}', 'sendMessage');
+        Route::post('/send-to-multiple', 'sendToUsers');
+        Route::get('/get-messages/{ID}',  'getMessages');
+    });
+
+
+
