@@ -131,7 +131,7 @@ class BuyingController extends Controller
     {
         try {
             $pendingOrders = $this->orderService->getPendingOrders();
-
+            
             return BuyingResource::collection($pendingOrders);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

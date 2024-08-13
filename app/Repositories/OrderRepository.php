@@ -23,64 +23,29 @@ class OrderRepository
 
     public function getPendingOrders()
     {
-        $userId = auth()->id();
-
-        if (is_null($userId)) {
-            throw new \Exception('User not authenticated');
-        }
-
-        return BuyProduct::where('state', 'pending')
-            ->where('representative_id', $userId)
-            ->get();
-    }
-
-    public function getAcceptedOrders()
-    {
-        $userId = auth()->id();
-
-        if (is_null($userId)) {
-            throw new \Exception('User not authenticated');
-        }
-
-        return BuyProduct::where('state', 'accept')
-            ->where('representative_id', $userId)
-            ->get();
+        return BuyProduct::where('state','pending')->get();
     }
 
     public function getReceivedOrders()
     {
-        $userId = auth()->id();
-
-        if (is_null($userId)) {
-            throw new \Exception('User not authenticated');
-        }
-
-        return BuyProduct::where('state', 'received')
-            ->where('representative_id', $userId)
-            ->get();
-    }
-
-    public function getDoneOrders()
-    {
-        $userId = auth()->id();
-
-        if (is_null($userId)) {
-            throw new \Exception('User not authenticated');
-        }
-        return BuyProduct::where('state', 'done')
-            ->where('representative_id', $userId)
-            ->get();
+        return BuyProduct::where('state', 'received')->get();
     }
 
     public function getUnreceivedOrders()
     {
         return BuyProduct::where('state', 'unreceived')->get();
     }
-    public function updateOrderStateToAccept($orderId, $userId)
+
+    public function getDoneOrders()
+    {
+        return BuyProduct::where('state', 'done')->get();
+    }
+
+    public function updateOrderStateToAccept($orderId)
     {
         $order = BuyProduct::findOrFail($orderId);
         $order->state = 'accept';
-        $order->representative_id = $userId;
+        $order->representative_id = auth()->id();
 
         $order->save();
 

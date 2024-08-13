@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EducationController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -88,7 +89,6 @@ Route::middleware('auth:api')->prefix('posts')
         Route::post('/like/{postId}', 'addLike');
         Route::post('/remove/like/{postId}', 'removeLike');
         Route::get('/post/total', 'countPosts');
-        //Route::get('/post/pending', 'countPendingPosts');
     });
 
 
@@ -119,11 +119,11 @@ Route::middleware('auth:api')->prefix('education')
         Route::get('/generateSignature', 'generateSignature');
         Route::POST('/saveExplanationUrl/{id}', 'saveExplanationUrl');
         ////JUST FOR TEASTING
-        // Route::POST('/uploadToCloudinary', 'uploadToCloudinary');
-        // Route::POST('/uploadToCloudinary1', 'uploadToCloudinary1');
-        // Route::POST('/uploadVideoToCloudinary', 'uploadVideoToCloudinary');
-        // Route::GET('/fetchVideoFromCloudinary', 'fetchVideoFromCloudinary');
-        // Route::GET('/fetchVideoFromCloudinary1', 'fetchVideoFromCloudinary1');
+        Route::POST('/uploadToCloudinary', 'uploadToCloudinary');
+        Route::POST('/uploadToCloudinary1', 'uploadToCloudinary1');
+        Route::POST('/uploadVideoToCloudinary', 'uploadVideoToCloudinary');
+        Route::GET('/fetchVideoFromCloudinary', 'fetchVideoFromCloudinary');
+        Route::GET('/fetchVideoFromCloudinary1', 'fetchVideoFromCloudinary1');
 
 
     });
@@ -161,10 +161,7 @@ Route::middleware('auth:api')->prefix('products')
         Route::get('/product/rejected', 'getRejectedProducts');
         Route::get('/user/get_user_products', 'getUserProducts');
         Route::get('/product/total', 'countProducts');
-
     });
-
-Route::get('/products/product/get_pending', [ProductController::class, 'PendingProducts']);
 
 /*
 |--------------------------------------------------------------------------
@@ -180,19 +177,36 @@ Route::middleware('auth:api')->prefix('baskets')
         Route::delete('/remove/{productId}', 'removeFromBasket');
     });
 
-Route::middleware('auth:api')->prefix('buying_orders')
+Route::middleware('auth:api')->prefix('orders')
     ->controller(BuyingController::class)
     ->group(function () {
-        Route::post('/order', 'placeOrder');
+        Route::post('/', 'placeOrder');
         Route::get('/{orderId}', 'showOrder');
-        Route::get('/user/get_user_orders', 'getUserOrders');
-        Route::get('/order/pending', 'getPendingOrders');
-        Route::get('/order/getacceptedOrders', 'getacceptedOrders');
+        Route::get('/order/getPendingOrders', 'getPendingOrders');
         Route::get('/order/getReceivedOrders', 'getReceivedOrders');
         Route::get('/order/getUnreceivedOrders', 'getUnreceivedOrders');
-        Route::get('/order/getDoneOrders', 'getDoneOrders');
-        Route::post('/order/accept/{orderId}', 'acceptOrder');
+        Route::get('/done', 'getDoneOrders');
         Route::post('/order/received/{orderId}', 'updateOrderState');
         Route::post('/order/done/{orderId}', 'updateOrderStateToDone');
         Route::post('/order/unreceived/{orderId}', 'updateOrderStateToUnreceived');
+        Route::get('/user/get_user_orders', 'getUserOrders');
     });
+
+
+/*
+|--------------------------------------------------------------------------
+|  Chat
+|--------------------------------------------------------------------------
+*/
+
+
+Route::middleware('auth:api')->prefix('chat')
+    ->controller(MessageController::class)
+    ->group(function () {
+        Route::post('/send-message/{ID}', 'sendMessage');
+        Route::post('/send-to-multiple', 'sendToUsers');
+        Route::get('/get-messages/{ID}',  'getMessages');
+    });
+
+
+
