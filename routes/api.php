@@ -63,6 +63,7 @@ Route::middleware('auth:api')->prefix('users')
         Route::post('/filterChildren', 'filterChildren');
         Route::get('/donor/total', 'countDonors');
         Route::get('/child/total', 'countChilds');
+        Route::get('/getAdminId', 'getAdminId');
 
 
     });
@@ -161,6 +162,8 @@ Route::middleware('auth:api')->prefix('products')
         Route::get('/product/rejected', 'getRejectedProducts');
         Route::get('/user/get_user_products', 'getUserProducts');
         Route::get('/product/total', 'countProducts');
+
+
     });
 
 /*
@@ -190,6 +193,9 @@ Route::middleware('auth:api')->prefix('orders')
         Route::post('/order/done/{orderId}', 'updateOrderStateToDone');
         Route::post('/order/unreceived/{orderId}', 'updateOrderStateToUnreceived');
         Route::get('/user/get_user_orders', 'getUserOrders');
+
+        Route::post('/acceptOrder/{orderId}', 'acceptOrder');
+        Route::post('/order/getSoldProductsBetweenDates', 'getSoldProductsBetweenDates');
     });
 
 

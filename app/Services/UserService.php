@@ -341,4 +341,10 @@ class UserService
     {
         return $this->userRepository->countChild();
     }
+
+    public function getAdminId()
+    {
+        $admin = $this->userRepository->getAdmin();
+        return $admin ? $admin->id : null;
+    }
 }

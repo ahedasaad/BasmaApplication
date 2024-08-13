@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\SoldProductResource;
 use App\Repositories\ProductRepository;
 
 class ProductService
@@ -92,4 +93,6 @@ class ProductService
     {
         return $this->productRepository->countPendingProduct();
     }
+
+
 }

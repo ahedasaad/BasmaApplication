@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Models\BuyProduct;
 use App\Models\Product;
 use App\Models\Category;
+use Carbon\Carbon;
 
 class ProductRepository
 {
@@ -112,4 +114,6 @@ class ProductRepository
         $productCount = Product::where('demand_state', 'pending')->count();
         return $productCount;
     }
+
+
 }

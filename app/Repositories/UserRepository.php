@@ -98,4 +98,8 @@ class UserRepository
         return $childCount;
     }
 
+    public function getAdmin()
+    {
+        return User::where('account_type', 'admin')->first();
+    }
 }

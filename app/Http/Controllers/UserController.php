@@ -50,7 +50,6 @@ class UserController extends Controller
     public function addEmployee(Request $request)
     {
         try {
-            // Add employee
             $employee = $this->userService->addEmployee($request->all());
             return response()->json($employee);
         } catch (\Exception $e) {
@@ -260,5 +259,12 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+
+    public function getAdminId()
+    {
+        $adminId = $this->userService->getAdminId();
+        return response()->json(['admin_id' => $adminId]);
     }
 }

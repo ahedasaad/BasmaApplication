@@ -131,7 +131,7 @@ class BuyingController extends Controller
     {
         try {
             $pendingOrders = $this->orderService->getPendingOrders();
-            
+
             return BuyingResource::collection($pendingOrders);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -250,4 +250,27 @@ class BuyingController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
+    public function getSoldProductsBetweenDates(Request $request)
+    {
+        try {
+            $request->validate([
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
+            ]);
+
+            $result = $this->orderService->getSoldProductsBetweenDates($request->start_date, $request->end_date);
+
+            return response()->json([
+                'total_records' => $result['soldProducts']->count(),
+                'total_price' => $result['totalPrice'],
+                'data' => $result['soldProducts'],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
 }

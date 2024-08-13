@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Basket;
 use App\Models\Product;
 use App\Models\BuyProduct;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository
@@ -87,5 +88,13 @@ class OrderRepository
     public function getUserOrders($userId)
     {
         return BuyProduct::where('user_id', $userId)->get();
+    }
+
+    public function getSoldProductsBetweenDates($startDate, $endDate)
+    {
+        return BuyProduct::with(['product', 'representative'])
+            ->whereBetween('created_at', [Carbon::parse($startDate), Carbon::parse($endDate)])
+            ->where('state', 'done')
+            ->get(['id','product_id', 'representative_id', 'created_at']);
     }
 }

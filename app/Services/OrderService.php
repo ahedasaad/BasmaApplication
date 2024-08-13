@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Resources\SoldProductResource;
 use App\Repositories\OrderRepository;
 use App\Repositories\BasketRepository;
 
@@ -81,5 +82,19 @@ class OrderService
     public function getUserOrders($userId)
     {
         return $this->orderRepository->getUserOrders($userId);
+    }
+
+    public function getSoldProductsBetweenDates($startDate, $endDate)
+    {
+        $soldProducts = $this->orderRepository->getSoldProductsBetweenDates($startDate, $endDate);
+
+        $totalPrice = $soldProducts->sum(function ($buyProduct) {
+            return $buyProduct->product->price;
+        });
+
+        return [
+            'soldProducts' => SoldProductResource::collection($soldProducts),
+            'totalPrice' => $totalPrice,
+        ];
     }
 }
