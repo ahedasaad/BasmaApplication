@@ -50,7 +50,7 @@ class PostRepository
         $query = Post::query();
 
         if ($postCategory) {
-            $query->where('post_category', '=', $postCategory);
+            $query->where('post_category', '=', $postCategory)->where('state', 'approved');
         }
 
         return $query->withCount('likes')->get();
