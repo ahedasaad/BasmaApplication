@@ -114,6 +114,4 @@ class ProductRepository
         $productCount = Product::where('demand_state', 'pending')->count();
         return $productCount;
     }
-
-
 }

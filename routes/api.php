@@ -64,8 +64,6 @@ Route::middleware('auth:api')->prefix('users')
         Route::get('/donor/total', 'countDonors');
         Route::get('/child/total', 'countChilds');
         Route::get('/getAdminId', 'getAdminId');
-
-
     });
 
 
@@ -162,8 +160,6 @@ Route::middleware('auth:api')->prefix('products')
         Route::get('/product/rejected', 'getRejectedProducts');
         Route::get('/user/get_user_products', 'getUserProducts');
         Route::get('/product/total', 'countProducts');
-
-
     });
 
 /*
@@ -180,21 +176,21 @@ Route::middleware('auth:api')->prefix('baskets')
         Route::delete('/remove/{productId}', 'removeFromBasket');
     });
 
-Route::middleware('auth:api')->prefix('orders')
+    Route::middleware('auth:api')->prefix('buying_orders')
     ->controller(BuyingController::class)
     ->group(function () {
-        Route::post('/', 'placeOrder');
+        Route::post('/order', 'placeOrder');
         Route::get('/{orderId}', 'showOrder');
-        Route::get('/order/getPendingOrders', 'getPendingOrders');
+        Route::get('/user/get_user_orders', 'getUserOrders');
+        Route::get('/order/pending', 'getPendingOrders');
+        Route::get('/order/getacceptedOrders', 'getacceptedOrders');
         Route::get('/order/getReceivedOrders', 'getReceivedOrders');
         Route::get('/order/getUnreceivedOrders', 'getUnreceivedOrders');
-        Route::get('/done', 'getDoneOrders');
+        Route::get('/order/getDoneOrders', 'getDoneOrders');
+        Route::post('/order/accept/{orderId}', 'acceptOrder');
         Route::post('/order/received/{orderId}', 'updateOrderState');
         Route::post('/order/done/{orderId}', 'updateOrderStateToDone');
         Route::post('/order/unreceived/{orderId}', 'updateOrderStateToUnreceived');
-        Route::get('/user/get_user_orders', 'getUserOrders');
-
-        Route::post('/acceptOrder/{orderId}', 'acceptOrder');
         Route::post('/order/getSoldProductsBetweenDates', 'getSoldProductsBetweenDates');
     });
 
