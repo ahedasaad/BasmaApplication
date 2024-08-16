@@ -40,7 +40,7 @@ class UserService
         $data['account_type'] = isset($data['account_type']) ? $data['account_type'] : 'employee';
         $data['password'] = Hash::make($data['password']);
         $user = $this->userRepository->create($data);
-        $user->assignRole('employee');
+        //$user->assignRole('employee');
 
         return $user;
     }
@@ -74,7 +74,7 @@ class UserService
         $data['account_type'] = isset($data['account_type']) ? $data['account_type'] : 'representative';
         $data['password'] = Hash::make($data['password']);
         $user = $this->userRepository->create($data);
-        $user->assignRole('representative');
+        //$user->assignRole('representative');
         return $user;
     }
 
@@ -126,7 +126,7 @@ class UserService
         $data['password'] = Hash::make($data['password']);
 
         $user = $this->userRepository->create($data);
-        $user->assignRole('child');
+        //$user->assignRole('child');
         $childData = array_merge($data, ['user_id' => $user->id]);
         $child = $this->childRepository->create($childData);
         $user->child = $child;
