@@ -191,7 +191,7 @@ Route::middleware('auth:api')->prefix('baskets')
         Route::post('/order/received/{orderId}', 'updateOrderState');
         Route::post('/order/done/{orderId}', 'updateOrderStateToDone');
         Route::post('/order/unreceived/{orderId}', 'updateOrderStateToUnreceived');
-        Route::post('/order/getSoldProductsBetweenDates', 'getSoldProductsBetweenDates');
+        Route::get('/order/getSoldProductsBetweenDates', 'getSoldProductsBetweenDates');
     });
 
 
