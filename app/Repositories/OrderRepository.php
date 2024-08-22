@@ -31,7 +31,7 @@ class OrderRepository
         }
 
         return BuyProduct::where('state', 'pending')
-            ->where('representative_id', $userId)
+            //->where('representative_id', $userId)
             ->get();
     }
 

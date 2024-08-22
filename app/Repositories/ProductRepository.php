@@ -16,7 +16,7 @@ class ProductRepository
 
     public function getAllPaginated()
     {
-        return Product::paginate(10);
+        return Product::where('demand_state', 'approved')->paginate(10);
     }
 
     public function getByCategory($categoryId)
@@ -59,7 +59,7 @@ class ProductRepository
         $categoryId = $attributes['category_id'] ?? null;
         $state = $attributes['state'] ?? null;
 
-        $query = Product::query();
+        $query = Product::where('demand_state', 'approved')->query();
 
         if ($categoryId != null) {
             $query->where('category_id', '=', $categoryId);
