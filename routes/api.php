@@ -208,7 +208,7 @@ Route::middleware('auth:api')->prefix('chat')
         Route::post('/send-message/{ID}', 'sendMessage');
         Route::post('/send-to-multiple', 'sendToUsers');
         Route::get('/get-messages/{ID}',  'getMessages');
-        Route::get('/get-messages/{ID}',  'getMessagesWithData');
+        Route::get('/getMessagesWithData/{ID}',  'getMessagesWithData');
         Route::get('/getAdminConversations',  'getAdminConversations');
 
     });

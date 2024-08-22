@@ -106,7 +106,6 @@ class MessageController extends Controller
 
         return response()->json( $messages);
     }
-
     public function getMessagesWithData($receiver_id)
     {
         $sender_id = Auth::id();  // الحصول على معرف المستخدم الحالي
@@ -119,27 +118,30 @@ class MessageController extends Controller
         })->get();
 
         // تعديل الرسائل حسب نوع الحساب
-        foreach ($messages as $message) {
+        $messages = $messages->map(function ($message) {
             $sender = User::find($message->sender_id);
             $receiver = User::find($message->receiver_id);
 
-            // إذا كان user_name غير موجود أو null، استبدله بـ 'admin'
+            // تعيين أسماء المرسل والمستقبل
             $message->sender_name = $sender ? ($sender->name ?? 'admin') : 'admin';
             $message->receiver_name = $receiver ? ($receiver->name ?? 'admin') : 'admin';
 
-            // تعديل الرسالة حسب نوع الحساب
-            switch ($sender->account_type) {
-                case 'admin':
+            // إعداد الرسائل بناءً على نوع الحساب
+            if ($sender && $receiver) {
+                if ($sender->account_type === 'admin') {
                     $message->message_admin = $message->message;
-                    unset($message->message);  // إزالة الحقل القديم
-                    break;
-                case 'child':
+                    $message->message_child = null;  // مسح رسالة الطفل
+                } elseif ($sender->account_type === 'child') {
+                    $message->message_admin = null;  // مسح رسالة الادمن
                     $message->message_child = $message->message;
-                    unset($message->message);  // إزالة الحقل القديم
-                    break;
-                // يمكنك إضافة حالات أخرى هنا إذا لزم الأمر
+                }
             }
-        }
+
+            // إزالة الحقل القديم
+            unset($message->message);
+
+            return $message;
+        });
 
         return response()->json(['data' => $messages]);
     }
