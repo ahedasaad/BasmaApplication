@@ -53,7 +53,7 @@ class PostRepository
             $query->where('post_category', '=', $postCategory)->where('state', 'approved');
         }
 
-        return $query->withCount('likes')->get();
+        return $query->withCount('likes')->orderBy('created_at', 'desc')->get();
     }
 
     public function acceptPost($id)
