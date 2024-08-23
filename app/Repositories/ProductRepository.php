@@ -28,7 +28,7 @@ class ProductRepository
 
     public function getProducts()
     {
-        return Product::where('demand_state', 'approved')
+        return Product::where('demand_state', 'pending')
             ->paginate(10);
     }
 
