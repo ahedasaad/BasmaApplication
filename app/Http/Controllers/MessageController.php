@@ -145,7 +145,6 @@ class MessageController extends Controller
 
         return response()->json(['data' => $messages]);
     }
-
     public function getAdminConversations()
     {
         $admin_id = Auth::id();  // الحصول على معرف المستخدم الحالي (المفترض أن يكون Admin)
@@ -155,22 +154,29 @@ class MessageController extends Controller
             ->orWhere('receiver_id', $admin_id)
             ->orderBy('created_at', 'desc')  // ترتيب حسب الأحدث
             ->get()
-            ->unique('receiver_id');  // تجميع حسب المحادثة مع كل طفل
+            ->unique(function ($message) use ($admin_id) {
+                // تجميع حسب المحادثة مع كل طفل
+                return $message->sender_id == $admin_id ? $message->receiver_id : $message->sender_id;
+            });
 
         // معالجة البيانات لكل محادثة
         $result = $conversations->map(function ($message) use ($admin_id) {
-            // نعتبر أن الطفل هو الشخص الآخر في المحادثة
-            $child = $message->sender_id == $admin_id ? $message->receiver : $message->sender;
+            // تحديد من هو الطفل في المحادثة
+            $is_child_sender = $message->sender_id != $admin_id;
 
             return [
-                'child_name' => $child->name,
+                'child_name' => $is_child_sender ? $message->sender->name : $message->receiver->name,  // اسم الطفل
                 'last_message' => $message->message,
                 'timestamp' => $message->created_at,
+                'user_id' => $is_child_sender ? $message->sender_id : $message->receiver_id,  // جلب ID الطفل
+                'sender' => $is_child_sender ? 'child' : 'admin',  // تحديد مصدر الرسالة الأخيرة
             ];
         });
 
         return response()->json($result);
     }
+
+
 
 
 }
