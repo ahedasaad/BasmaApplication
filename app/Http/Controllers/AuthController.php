@@ -44,7 +44,7 @@ class AuthController extends Controller
                 'expiration_date' => now()->addDays(3),
             ]);
 
-            Mail::to($user->email)->send(new UserConfirmationMail($code));
+            //Mail::to($user->email)->send(new UserConfirmationMail($code));
 
             return response()->json(['message' => 'User registered successfully']);
         } catch (\Exception $e) {
