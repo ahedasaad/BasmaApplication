@@ -44,7 +44,7 @@ class EducationController extends Controller
     protected $educationService;
     protected $cloudinaryService;
 
-    public function __construct(EducationService $educationService,CloudinaryService $cloudinaryService)
+    public function __construct(EducationService $educationService, CloudinaryService $cloudinaryService)
     {
         $this->educationService = $educationService;
         $this->cloudinaryService = $cloudinaryService;
@@ -71,7 +71,7 @@ class EducationController extends Controller
         try {
 
             $subjects = $this->educationService->getSubjectsForClassroom($classroomId);
-            return response()->json(['data'=>$subjects]);
+            return response()->json(['data' => $subjects]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -85,7 +85,7 @@ class EducationController extends Controller
     {
         $titles = $this->educationService->getTitlesForSubjectClass($subjectClassId);
 
-        return response()->json(['data'=>$titles]);
+        return response()->json(['data' => $titles]);
     }
 
     /**
@@ -282,7 +282,7 @@ class EducationController extends Controller
 
         try {
             $explanations = $this->educationService->getExplanationsByTitle($titleId);
-            return response()->json(['data'=>$explanations]);
+            return response()->json(['data' => $explanations]);
 
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -321,10 +321,10 @@ class EducationController extends Controller
     /**
      * Reject an explanation.
      */
-    public function rejectedExplanation($explanation,Request $request)
+    public function rejectedExplanation($explanation, Request $request)
     {
         try {
-            $explanation = $this->educationService->rejectedExplanation($explanation,$request->all());
+            $explanation = $this->educationService->rejectedExplanation($explanation, $request->all());
 
             return response()->json($explanation);
         } catch (\Exception $e) {
@@ -334,159 +334,15 @@ class EducationController extends Controller
     }
 
 
-    //CLOUDINARY_UPLOAD_PRESET=ml_default
-    //CLOUDINARY_CLOUD_NAME=dftvov92g
-    //CLOUDINARY_API_KEY=464627112571591
-    //CLOUDINARY_API_SECRET=8JFiG3bxjkOVnGaN-oRPKCTObto
-    //CLOUDINARY_URL=cloudinary://464627112571591:8JFiG3bxjkOVnGaN-oRPKCTObto@dftvov92g
-
-    // public function generateSignature1()
-    // {
-    //     try {
-    //         $signatureData = $this->cloudinaryService->generateSignature();
-
-    //         return response()->json(['$signatureData'=>$signatureData]);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => $e->getMessage()], 500);
-    //     }
-
-    // }
-
     public function saveExplanationUrl(Request $request, $explanatId)
     {
-        try {// استخراج الرابط من الريكوس
+        try {
             $url = $request->input('url');
             $title = $request->input('title');
-            $explanatId=$this->cloudinaryService->saveExplanationUrl($explanatId, $url,$title);
-        return response()->json(['message' => 'Explanation URL saved successfully','explanatId'=>$explanatId]);
+            $explanatId = $this->cloudinaryService->saveExplanationUrl($explanatId, $url, $title);
+            return response()->json(['message' => 'Explanation URL saved successfully', 'explanatId' => $explanatId]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
-    ////////////just for teasting
-    // public function uploadToCloudinary1(Request $request)
-    // {
-    //     try {
-    //         // تحقق من أن الطلب يحتوي على ملف مرفق
-    //         if (!$request->hasFile('image')) {
-    //             return response()->json(['error' => 'No image file found in the request'], 400);
-    //         }
-
-    //         $uploadResponse = $this->cloudinaryService->uploadToCloudinary1($request);
-
-    //         return response()->json(['uploadResponse' => $uploadResponse]);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => $e->getMessage()], 500);
-    //     }
-    // }
-
-    // public function generateSignature()
-    // {
-    //     $timestamp = time();
-    //     $paramsToSign = [
-    //         'timestamp' => $timestamp,
-    //         'upload_preset' => 'ml_default', // يجب أن تكون قد أنشأت مسبقًا في إعدادات Cloudinary
-    //     ];
-
-    //     $apiSecret = env('CLOUDINARY_API_SECRET');
-    //     $signature = \Cloudinary\Api\ApiUtils::signParameters($paramsToSign, $apiSecret);
-
-    //     return response()->json([
-    //         'signature' => $signature,
-    //         'timestamp' => $timestamp,
-    //         'api_key' => env('CLOUDINARY_API_KEY'),
-    //         'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
-    //         'upload_preset' => 'ml_default',
-    //     ]);
-    // }
-
-
-//     public function uploadToCloudinary(Request $request)
-//     {
-//         // احصل على التوقيع الرقمي من المشروع الآخر
-//         $signatureResponse = $this->generateSignature();
-//         $signatureData = $signatureResponse->getData(true); // تحويل الاستجابة إلى مصفوفة
-
-
-//         $file = $request->file('image');
-
-//         // إنشاء FormData وإضافة البيانات اللازمة
-//         $formData = [
-//             'file' => fopen($file->getPathname(), 'r'),
-//             'timestamp' => $signatureData['timestamp'],
-//             'api_key' => $signatureData['api_key'],
-//             'signature' => $signatureData['signature'],
-//             'upload_preset' => $signatureData['upload_preset'],
-//         ];
-
-//         // إرسال طلب الرفع إلى Cloudinary مع زيادة مهلة الاتصال
-//         $uploadResponse = Http::timeout(1800) // تحديد المهلة بـ 60 ثانية
-//         ->asMultipart()
-//             ->post("https://api.cloudinary.com/v1_1/{$signatureData['cloud_name']}/image/upload", $formData);
-
-//         return response()->json($uploadResponse->json());
-//     }
-
-//     public function uploadVideoToCloudinary(Request $request)
-//     {
-//         // احصل على التوقيع الرقمي من المشروع الآخر
-//         $signatureResponse = $this->generateSignature();
-//         $signatureData = $signatureResponse->getData(true); // تحويل الاستجابة إلى مصفوفة
-
-//         $file = $request->file('video'); // استخدام 'video' بدلاً من 'image'
-
-//         // إنشاء FormData وإضافة البيانات اللازمة
-//         $formData = [
-//             'file' => fopen($file->getPathname(), 'r'),
-//             'timestamp' => $signatureData['timestamp'],
-//             'api_key' => $signatureData['api_key'],
-//             'signature' => $signatureData['signature'],
-//             'upload_preset' => $signatureData['upload_preset'],
-//         ];
-
-//         // إرسال طلب الرفع إلى Cloudinary مع زيادة مهلة الاتصال
-//         $uploadResponse = Http::timeout(1800) // تحديد المهلة بـ 30 دقيقة
-//         ->asMultipart()
-//             ->post("https://api.cloudinary.com/v1_1/{$signatureData['cloud_name']}/video/upload", $formData);
-
-//         return response()->json($uploadResponse->json());
-//     }
-
-//     public function fetchVideoFromCloudinary()
-//     {
-//         // احصل على التوقيع الرقمي من المشروع الآخر
-//         $signatureResponse = $this->generateSignature();
-//         $signatureData = $signatureResponse->getData(true); // تحويل الاستجابة إلى مصفوفة
-
-// //        $publicId = $request->input('public_id'); // احصل على public_id من الطلب
-//         $publicId='phpB3D5_zmy4fv';
-//         // إعداد المعلمات اللازمة للطلب
-//         $params = [
-//             'timestamp' => $signatureData['timestamp'],
-//             'public_id' => 'phpB3D5_zmy4fv',
-//             'api_key' => $signatureData['api_key'],
-//             'signature' => $signatureData['signature'],
-//         ];
-
-//         // إرسال طلب الجلب إلى Cloudinary
-//         $fetchResponse = Http::timeout(150) // تحديد المهلة بـ 30 دقيقة
-//         ->get("https://res.cloudinary.com/{$signatureData['cloud_name']}/video/upload/{$publicId}", $params);
-//         if ($fetchResponse->failed()) {
-//             return response()->json(['error' => 'Failed to fetch video from Cloudinary'], 500);
-//         }
-//         return response()->json($fetchResponse);
-//     }
-//     public function fetchVideoFromCloudinary1()
-//     {
-//         // جلب الفيديو من Cloudinary باستخدام معرف الفيديو
-//         $fetchResponse = Cloudinary::video('phpB3D5_zmy4fv');
-
-//         // يمكنك تنفيذ أي عمليات إضافية هنا مع الفيديو
-//         // على سبيل المثال، يمكنك إضافة مرشحات أو تطبيق تعديلات
-
-//         // إرجاع الفيديو
-//         return response()->json($fetchResponse);;
-//     }
-
 }

@@ -255,13 +255,16 @@ class BuyingController extends Controller
     public function getSoldProductsBetweenDates(Request $request)
     {
         try {
+            // تحقق من المدخلات
             $request->validate([
                 'start_date' => 'required|date',
                 'end_date' => 'required|date',
             ]);
 
+            // استرجاع البيانات من الخدمة
             $result = $this->orderService->getSoldProductsBetweenDates($request->start_date, $request->end_date);
 
+            // إرجاع الاستجابة كـ JSON
             return response()->json([
                 'total_records' => $result['soldProducts']->count(),
                 'total_price' => $result['totalPrice'],
