@@ -59,7 +59,7 @@ class ProductRepository
         $categoryId = $attributes['category_id'] ?? null;
         $state = $attributes['state'] ?? null;
 
-        $query = Product::where('demand_state', 'approved')->query();
+        $query = Product::where('demand_state', 'approved');
 
         if ($categoryId != null) {
             $query->where('category_id', '=', $categoryId);
